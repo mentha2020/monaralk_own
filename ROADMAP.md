@@ -164,7 +164,7 @@ Indexes: `(status, published_at)`, `(make_id, model_id)`, `year`, `price`, `mile
 **Verify:** policy tests ✓ · image upload test ✓ · approval-transaction test ✓ · Excel round-trip ✓
 
 ### Phase 5 — Public Storefront
-- **5a** Responsive layout/nav/footer, dark-mode toggle, brand tokens in TW4 `@theme`
+- **5a** Responsive layout/nav/footer, dark-mode toggle *(brand tokens already live in the TW4 `@theme` from Phase 3)*
 - **5b** Home: hero search, featured strip, latest, brand grid, trust section
 - **5c** `/vehicles` Livewire search — full filter set + keyword + sort + pagination + URL query-string sync + mobile drawer + applied-filter chips
 - **5d** `<x-listing.card>` — cover, price, specs, featured badge, favourite slot, contact-actions slot
@@ -324,7 +324,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 0 | Inspection & Environment Baseline | ✅ **Complete** — [report](docs/phases/PHASE_0.md) |
 | 1 | Scaffold & Stack Bootstrap | ✅ **Complete** — [report](docs/phases/PHASE_1.md) |
 | 2 | Architecture Foundation & Database | ✅ **Complete** — [report](docs/phases/PHASE_2.md) |
-| 3 | Authentication, RBAC & Authorization | ⬜ |
+| 3 | Authentication, RBAC & Authorization | ✅ **Complete** — [report](docs/phases/PHASE_3.md) |
 | 4 | Admin Panel (Filament 3) | ⬜ |
 | 5 | Public Storefront | ⬜ |
 | 6 | Contact Actions: Call · WhatsApp · Share | ⬜ |
@@ -351,3 +351,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-08 | Phase 0 complete — DB corrected to **MySQL 8.4.3**, conflict F added |
 | 2026-10-08 | Phase 1 complete — Laravel 12.69.3 scaffold, all stack packages pinned & installed, conflicts **A** + **B** resolved, `monaralk_test` MySQL DB wired for Pest |
 | 2026-10-08 | Phase 2 complete — 5 modules + discovery hooks, 6 enums, 15 new migrations, 14 models, 14 factories, 7 seeders, 4 policies; `migrate:fresh --seed` + 56 tests green |
+| 2026-10-08 | Phase 3 complete — Spatie middleware aliases, `FilamentUser::canAccessPanel()` staff gate, brand tokens + dark mode across every Breeze view; 77 tests green |

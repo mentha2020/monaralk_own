@@ -8,16 +8,20 @@ use App\Modules\Catalog\Models\Vehicle;
 use App\Modules\Leads\Models\Enquiry;
 use App\Modules\Submissions\Models\VehicleSubmission;
 use Database\Factories\UserFactory;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable;
+
+    public const STAFF_ROLES = ['super_admin', 'admin', 'editor', 'viewer'];
 
     /**
      * The attributes that are mass assignable.
@@ -71,5 +75,15 @@ class User extends Authenticatable
     public function savedVehicles(): HasMany
     {
         return $this->hasMany(SavedVehicle::class);
+    }
+
+    public function isStaff(): bool
+    {
+        return $this->hasAnyRole(self::STAFF_ROLES);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->isStaff();
     }
 }

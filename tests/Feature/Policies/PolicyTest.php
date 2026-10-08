@@ -18,14 +18,6 @@ beforeEach(function () {
     $this->seed(RoleSeeder::class);
 });
 
-function staff(string $role): User
-{
-    $user = User::factory()->create();
-    $user->syncRoles([$role]);
-
-    return $user;
-}
-
 test('every module policy is registered on the gate', function () {
     $registered = [
         Vehicle::class => VehiclePolicy::class,

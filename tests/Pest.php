@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -47,4 +48,12 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function staff(string $role): User
+{
+    $user = User::factory()->create();
+    $user->syncRoles([$role]);
+
+    return $user;
 }

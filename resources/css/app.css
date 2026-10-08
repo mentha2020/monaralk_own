@@ -4,6 +4,26 @@
 
 @plugin "@tailwindcss/forms";
 
+@theme {
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+    --color-brand-50: #edfbf7;
+    --color-brand-100: #d3f6ec;
+    --color-brand-200: #abeada;
+    --color-brand-300: #78d9c3;
+    --color-brand-400: #43c0a8;
+    --color-brand-500: #1da68e;
+    --color-brand-600: #118672;
+    --color-brand-700: #0f6b5d;
+    --color-brand-800: #0f554b;
+    --color-brand-900: #0f463e;
+    --color-brand-950: #072a26;
+
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #f59e0b;
+    --color-accent-600: #d97706;
+}
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
