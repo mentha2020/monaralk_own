@@ -287,7 +287,7 @@ class Vehicle extends Model
         return $this->status === VehicleStatus::Sold;
     }
 
-    private static function uniqueVehicleSlug(self $vehicle): string
+    public static function uniqueVehicleSlug(self $vehicle): string
     {
         $prefix = collect([
             $vehicle->make?->name,

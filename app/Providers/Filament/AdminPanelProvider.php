@@ -32,6 +32,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverResources(in: app_path('Modules'), for: 'App\\Modules')
             ->discoverPages(in: app_path('Modules'), for: 'App\\Modules')
+            ->navigationGroups([
+                'Catalog',
+                'Leads',
+                'Accounts',
+                'Settings',
+            ])
             ->pages([
                 Pages\Dashboard::class,
             ])

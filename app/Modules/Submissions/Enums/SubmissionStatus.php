@@ -33,4 +33,11 @@ enum SubmissionStatus: string
     {
         return $this === self::Approved || $this === self::Rejected;
     }
+
+    public static function options(): array
+    {
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $case) => [$case->value => $case->label()])
+            ->all();
+    }
 }
