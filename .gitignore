@@ -30,6 +30,9 @@ yarn-error.log
 /database/*.sqlite
 /database/*.sqlite-journal
 
+# Generated demo imagery (rebuilt by database/seeders/VehicleSeeder.php)
+/storage/app/public/vehicles/
+
 # OS
 .DS_Store
 Thumbs.db
