@@ -1,37 +1,41 @@
-# Laravel / PHP
-/vendor
+/.phpunit.cache
 /node_modules
+/public/build
+/public/fonts-manifest.dev.json
 /public/hot
 /public/storage
 /storage/*.key
 /storage/pail
+/vendor
 .env
-.env.*
-!.env.example
-/auth.json
+.env.backup
+.env.production
+.env.local
+.phpactor.json
 .phpunit.result.cache
-.phpunit.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/auth.json
 /.fleet
 /.idea
-/.vscode
 /.nova
+/.vscode
 /.zed
+/.codex
+/.cursor/
 
-# Build output
-/public/build
-/public/hot
-/public/mix-manifest.json
+# Local databases
+/database/*.sqlite
+/database/*.sqlite-journal
 
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Backups
+# Backups / exports
 *.sql
 *.sql.gz
-*.sqlite
+*.zip

@@ -48,8 +48,8 @@ Car listing website: public storefront + Filament admin. Mobile app is **deferre
 
 | # | Conflict | Resolution |
 |---|---|---|
-| A | Breeze installs Tailwind **v3** config (`tailwind.config.js`, `postcss.config.js`, `@tailwind` directives, `tailwindcss ^3.1.0`) | Phase 1.5 migrates to TW4: `@tailwindcss/vite`, `@import 'tailwindcss'`, `@source`, `@custom-variant dark` for Breeze's `.dark` class |
-| B | Breeze bundles its own Alpine → collides with Livewire 3's bundled Alpine (Filament requires Livewire) | Phase 1.6 strips Alpine from `resources/js/app.js`, adds `\Livewire\Livewire::forceAssetInjection()` |
+| A | Breeze installs Tailwind **v3** config (`tailwind.config.js`, `postcss.config.js`, `@tailwind` directives, `tailwindcss ^3.1.0`) | ✅ Resolved (1.5): `@tailwindcss/vite` restored in `vite.config.js`; `@import 'tailwindcss'` + `@source` + `@custom-variant dark` in `app.css`; TW3 config files deleted; `tailwindcss ^4` + `@tailwindcss/forms ^0.5.11` (0.5.11 is the max — 0.6 does not exist) |
+| B | Breeze bundles its own Alpine → collides with Livewire 3's bundled Alpine (Filament requires Livewire) | ✅ Resolved (1.6): Alpine stripped from `resources/js/app.js`; `Livewire::forceAssetInjection()` set in `AppServiceProvider::boot()` — putting it in `bootstrap/app.php` throws *"A facade root has not been set"* |
 | C | Filament custom theming needs a Tailwind v3 build | Deferred; v1 ships Filament's default precompiled theme |
 | D | `maatwebsite/excel ^4.0` is a recent major | Fall back to `^3.1.70` (also Laravel-12 compatible) if its API surprises |
 | E | Facebook cannot post a bare image | Share links the listing URL; `og:image` supplies the preview |
@@ -305,8 +305,8 @@ D                                              16 → 17
 
 | Risk | Mitigation |
 |---|---|
-| Breeze's TW3 config breaks the TW4 build | Phase 1.5 handles it before any UI work |
-| Alpine double-init breaks Livewire | Phase 1.6 removes Breeze's Alpine |
+| Breeze's TW3 config breaks the TW4 build | ✅ Handled (1.5) — resolved before any UI work. **Never re-run `breeze:install`**: it re-writes `vite.config.js`, `app.css`, `app.js`, `package.json` and re-creates the TW3 configs |
+| Alpine double-init breaks Livewire | ✅ Handled (1.6) — Breeze's Alpine removed; Livewire 3 owns Alpine for the whole app (Breeze's `x-data` markup is driven by it) |
 | Filament theming vs TW4 conflict | Filament default theme (precompiled); custom theming deferred past v1 |
 | `maatwebsite/excel ^4.0` recent major | Fall back to `^3.1.70` |
 | `spatie/laravel-sitemap` v8 needs PHP 8.4 | Pinned to `^7.4` |
@@ -322,7 +322,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | Phase | Name | Status |
 |---|---|---|
 | 0 | Inspection & Environment Baseline | ✅ **Complete** — [report](docs/phases/PHASE_0.md) |
-| 1 | Scaffold & Stack Bootstrap | ⬜ Not started |
+| 1 | Scaffold & Stack Bootstrap | ✅ **Complete** — [report](docs/phases/PHASE_1.md) |
 | 2 | Architecture Foundation & Database | ⬜ |
 | 3 | Authentication, RBAC & Authorization | ⬜ |
 | 4 | Admin Panel (Filament 3) | ⬜ |
@@ -349,3 +349,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-08 | Added Phase 6 — Call / WhatsApp / Share contact actions |
 | 2026-10-08 | Added Part B (Sanctum API) and Part C (Flutter app); mobile marked **held for later**, Part A + D in current scope |
 | 2026-10-08 | Phase 0 complete — DB corrected to **MySQL 8.4.3**, conflict F added |
+| 2026-10-08 | Phase 1 complete — Laravel 12.69.3 scaffold, all stack packages pinned & installed, conflicts **A** + **B** resolved, `monaralk_test` MySQL DB wired for Pest |
