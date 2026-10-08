@@ -230,7 +230,7 @@ class Vehicle extends Model
             $query->where('mileage_km', '<=', (int) $filters['max_mileage']);
         }
 
-        if (filled($filters['featured'] ?? null)) {
+        if (! empty($filters['featured'] ?? false)) {
             $query->where('is_featured', true);
         }
 

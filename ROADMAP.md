@@ -326,7 +326,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2 | Architecture Foundation & Database | ✅ **Complete** — [report](docs/phases/PHASE_2.md) |
 | 3 | Authentication, RBAC & Authorization | ✅ **Complete** — [report](docs/phases/PHASE_3.md) |
 | 4 | Admin Panel (Filament 3) | ✅ **Complete** — [report](docs/phases/PHASE_4.md) |
-| 5 | Public Storefront | ⬜ |
+| 5 | Public Storefront | ✅ **Complete** — [report](docs/phases/PHASE_5.md) |
 | 6 | Contact Actions: Call · WhatsApp · Share | ⬜ |
 | 7 | Enquiries & Public Submissions | ⬜ |
 | 8 | Accounts: Favourites & Compare | ⬜ |
@@ -353,3 +353,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-08 | Phase 2 complete — 5 modules + discovery hooks, 6 enums, 15 new migrations, 14 models, 14 factories, 7 seeders, 4 policies; `migrate:fresh --seed` + 56 tests green |
 | 2026-10-08 | Phase 3 complete — Spatie middleware aliases, `FilamentUser::canAccessPanel()` staff gate, brand tokens + dark mode across every Breeze view; 77 tests green |
 | 2026-10-08 | Phase 4 complete — 15 Filament resources, image pipeline (GD 800w/1600w variants + observer), transactional submission approval, XLSX export/import, DomPDF spec sheet, dashboard widgets; 132 tests green |
+| 2026-10-09 | Phase 5 complete — storefront layout + home, Livewire `/vehicles` search (16 URL-synced filters, sort, chips, pagination), `<x-listing.card>`, detail gallery/lightbox/view counter/finance calculator, public spec-sheet PDF; 158 tests green |

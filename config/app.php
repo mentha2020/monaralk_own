@@ -1,5 +1,8 @@
 <?php
 
+use App\Modules\Settings\Models\Setting;
+use Illuminate\Support\Facades\Facade;
+
 return [
 
     /*
@@ -98,6 +101,10 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'key' => env('APP_KEY'),
+
+    'aliases' => Facade::defaultAliases()->merge([
+        'Setting' => Setting::class,
+    ])->toArray(),
 
     'previous_keys' => [
         ...array_filter(
