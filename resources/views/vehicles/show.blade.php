@@ -319,6 +319,9 @@
                     <p class="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
                         {{ __('Ask about availability, service history or a test drive. Direct contact options appear here.') }}
                     </p>
+
+                    <x-listing.contact-actions :vehicle="$vehicle" variant="hero" />
+
                     <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                         {{ number_format($vehicle->views_count) }} {{ __('people have viewed this car') }}
                     </p>

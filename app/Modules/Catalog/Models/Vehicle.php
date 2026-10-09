@@ -168,6 +168,52 @@ class Vehicle extends Model
         return Attribute::get(fn (): string => (string) ($this->whatsapp ?: Setting::get('contact.whatsapp', $this->contactPhone)));
     }
 
+    protected function telHref(): Attribute
+    {
+        $number = preg_replace('/\D+/', '', $this->contactPhone);
+        $plus = str_starts_with(trim($this->contactPhone), '+') ? '+' : '';
+
+        return Attribute::get(fn (): string => ($number ?? '') === '' ? '' : 'tel:'.$plus.$number);
+    }
+
+    protected function whatsappNumber(): Attribute
+    {
+        $digits = preg_replace('/\D+/', '', $this->contactWhatsApp);
+
+        if (($digits ?? '') !== '' && str_starts_with($digits, '0')) {
+            $digits = '94'.substr($digits, 1);
+        }
+
+        return Attribute::get(fn (): string => $digits ?? '');
+    }
+
+    protected function whatsappUrl(): Attribute
+    {
+        return Attribute::get(function (): string {
+            if ($this->whatsappNumber === '') {
+                return '';
+            }
+
+            $text = sprintf(
+                'interested in "%s" - %s LKR %s',
+                $this->listingTitle(),
+                number_format((float) $this->price),
+                route('vehicles.show', $this)
+            );
+
+            return 'https://wa.me/'.$this->whatsappNumber.'?text='.rawurlencode($text);
+        });
+    }
+
+    public function listingTitle(): string
+    {
+        return trim(implode(' ', array_filter([
+            $this->make?->name,
+            $this->model?->name,
+            $this->trim,
+        ])));
+    }
+
     protected function formattedPrice(): Attribute
     {
         return Attribute::get(fn (): string => 'LKR '.number_format((float) $this->price, 0));

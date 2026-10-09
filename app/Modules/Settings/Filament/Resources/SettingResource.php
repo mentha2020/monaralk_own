@@ -4,6 +4,7 @@ namespace App\Modules\Settings\Filament\Resources;
 
 use App\Modules\Settings\Filament\Resources\SettingResource\Pages;
 use App\Modules\Settings\Models\Setting;
+use App\Modules\Shared\Rules\ContactNumber;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -60,6 +61,12 @@ class SettingResource extends Resource
                     Forms\Components\Textarea::make('value')
                         ->label('Value')
                         ->rows(4)
+                        ->rules(fn (Forms\Get $get): array => in_array($get('key'), ['contact.phone', 'contact.whatsapp'], true)
+                            ? [new ContactNumber]
+                            : [])
+                        ->helperText(fn (Forms\Get $get): ?string => in_array($get('key'), ['contact.phone', 'contact.whatsapp'], true)
+                            ? 'Must contain 8–15 digits (spaces, +, ( ) are ignored).'
+                            : null)
                         ->columnSpanFull(),
                 ])->columns(2),
         ])->columns(2);

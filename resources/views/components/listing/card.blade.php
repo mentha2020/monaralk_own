@@ -100,5 +100,7 @@
         <div class="border-t border-slate-100 p-3 dark:border-slate-800">
             {{ $contactActions }}
         </div>
+    @else
+        <x-listing.contact-actions :vehicle="$vehicle" variant="card" />
     @endisset
 </article>

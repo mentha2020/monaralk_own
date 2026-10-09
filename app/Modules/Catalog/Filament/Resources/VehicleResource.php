@@ -7,6 +7,8 @@ use App\Modules\Catalog\Enums\VehicleStatus;
 use App\Modules\Catalog\Filament\Resources\VehicleResource\Pages;
 use App\Modules\Catalog\Models\Vehicle;
 use App\Modules\Catalog\Models\VehicleModel;
+use App\Modules\Settings\Models\Setting;
+use App\Modules\Shared\Rules\ContactNumber;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -221,11 +223,17 @@ class VehicleResource extends Resource
                                 Forms\Components\TextInput::make('phone')
                                     ->label('Phone')
                                     ->tel()
+                                    ->rules([new ContactNumber])
+                                    ->placeholder(fn (): ?string => Setting::get('contact.phone'))
+                                    ->helperText('Leave empty to use the global contact phone.')
                                     ->maxLength(40),
 
                                 Forms\Components\TextInput::make('whatsapp')
                                     ->label('WhatsApp')
                                     ->tel()
+                                    ->rules([new ContactNumber])
+                                    ->placeholder(fn (): ?string => Setting::get('contact.whatsapp'))
+                                    ->helperText('Leave empty to fall back to the phone above or the global number.')
                                     ->maxLength(40),
 
                                 Forms\Components\TextInput::make('phone_display')
