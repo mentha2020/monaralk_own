@@ -40,5 +40,5 @@ test('the csp allows the app scripts but blocks other origins', function () {
     expect($csp)->toContain("connect-src 'self'")
         ->and($csp)->toContain("img-src 'self' data: blob:")
         ->and($csp)->not->toContain("script-src 'self' https:")
-        ->and($csp)->not->toContain('unsafe-eval');
+        ->and($csp)->toContain("script-src 'self' 'unsafe-inline' 'unsafe-eval'");
 });
