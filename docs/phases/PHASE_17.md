@@ -131,7 +131,7 @@ A fourth test asserts the detail page only ever references a **bounded** image v
 |---|---|
 | `php artisan test` | ✅ 326 passed / 2017 assertions |
 | `vendor/bin/pint --test` | ✅ no changes |
-| Clean clone (`composer install` → `php artisan test`, no build needed) | ✅ 326 passed |
+| Clean clone (`composer install` → `npm ci` → `key:generate` → `php artisan test`) | ✅ 325 passed + 1 skipped (asset budget skips without a build); 326 with `npm run build` first |
 | `npm run build` | ✅ `app-Dz-7YPmB.css` 15.75 kB gz, `app-DMsN-rLE.js` 19.51 kB gz |
 | Contrast audit | ✅ all asserted pairs meet 4.5:1 (text) / 3:1 (UI) |
 | End-to-end smoke | ✅ full journey green |
