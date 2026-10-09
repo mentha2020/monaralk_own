@@ -32,10 +32,133 @@
             })();
         </script>
 
+        <script>
+            window.Monaralk = {
+                keys: { favourite: 'monaralk.favourites', compare: 'monaralk.compare' },
+                cap: {{ \App\Modules\Accounts\Services\SavedVehicles::COMPARE_CAP }},
+                get: function (type) {
+                    try {
+                        return JSON.parse(localStorage.getItem(this.keys[type])) || [];
+                    } catch (error) {
+                        return [];
+                    }
+                },
+                set: function (type, ids) {
+                    localStorage.setItem(this.keys[type], JSON.stringify(ids));
+                },
+                has: function (id, type) {
+                    return this.get(type).indexOf(Number(id)) !== -1;
+                },
+                toggle: function (id, type) {
+                    id = Number(id);
+                    var ids = this.get(type);
+                    var at = ids.indexOf(id);
+
+                    if (at === -1) {
+                        if (type === 'compare' && ids.length >= this.cap) {
+                            return false;
+                        }
+                        ids.push(id);
+                    } else {
+                        ids.splice(at, 1);
+                    }
+
+                    this.set(type, ids);
+
+                    return true;
+                },
+                counts: function () {
+                    return {
+                        favourite: this.get('favourite').length,
+                        compare: this.get('compare').length,
+                    };
+                },
+                announce: function (counts) {
+                    window.dispatchEvent(new CustomEvent('saved-changed', { detail: counts || this.counts() }));
+                },
+                merge: function () {
+                    if (!document.body || document.body.dataset.savedMerge !== '1') {
+                        return;
+                    }
+
+                    var payload = { favourite: this.get('favourite'), compare: this.get('compare') };
+
+                    if (!payload.favourite.length && !payload.compare.length) {
+                        return;
+                    }
+
+                    var token = document.querySelector('meta[name="csrf-token"]');
+
+                    fetch('{{ route('saved.merge') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json',
+                            'X-CSRF-TOKEN': token ? token.content : '',
+                        },
+                        body: JSON.stringify(payload),
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error('merge failed');
+                            }
+
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            window.Monaralk.set('favourite', []);
+                            window.Monaralk.set('compare', []);
+                            window.Monaralk.announce(data && data.counts ? data.counts : undefined);
+                        })
+                        .catch(function () {});
+                },
+            };
+
+            document.addEventListener('DOMContentLoaded', function () {
+                window.Monaralk.merge();
+            });
+
+            document.addEventListener('alpine:init', function () {
+                Alpine.data('savedBadges', function (initial) {
+                    return {
+                        counts: initial || window.Monaralk.counts(),
+                        init: function () {
+                            var self = this;
+
+                            window.addEventListener('saved-changed', function (event) {
+                                self.counts = event.detail;
+                            });
+                        },
+                    };
+                });
+
+                Alpine.data('saveActions', function (vehicleId) {
+                    return {
+                        favourite: window.Monaralk.has(vehicleId, 'favourite'),
+                        compare: window.Monaralk.has(vehicleId, 'compare'),
+                        notice: '',
+                        toggle: function (type) {
+                            if (type === 'compare' && !this.compare && window.Monaralk.get('compare').length >= window.Monaralk.cap) {
+                                this.notice = 'Compare is limited to ' + window.Monaralk.cap + ' cars.';
+
+                                return;
+                            }
+
+                            window.Monaralk.toggle(vehicleId, type);
+                            this.favourite = window.Monaralk.has(vehicleId, 'favourite');
+                            this.compare = window.Monaralk.has(vehicleId, 'compare');
+                            this.notice = '';
+                            window.Monaralk.announce();
+                        },
+                    };
+                });
+            });
+        </script>
+
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('head')
     </head>
-    <body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-200">
+    <body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-200" data-saved-merge="{{ auth()->check() ? '1' : '0' }}">
         <div class="min-h-screen flex flex-col">
             <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white">
                 Skip to content
@@ -86,6 +209,29 @@
                                 <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
                             </svg>
                         </button>
+
+                        <div
+                            x-data="savedBadges({{ \Illuminate\Support\Js::from(auth()->check() ? app(\App\Modules\Accounts\Services\SavedVehicles::class)->counts((int) auth()->id()) : null) }})"
+                            class="flex items-center gap-1"
+                        >
+                            <a href="{{ route('saved.favourites') }}"
+                               class="inline-flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
+                               aria-label="{{ __('Favourites') }}">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                </svg>
+                                <span class="text-xs font-bold" x-text="counts.favourite">0</span>
+                            </a>
+
+                            <a href="{{ route('saved.compare') }}"
+                               class="inline-flex items-center gap-1 rounded-lg px-2 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
+                               aria-label="{{ __('Compare') }}">
+                                <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 3h5v5M8 3H3v5M21 3l-7 7M3 3l7 7M16 21h5v-5M8 21H3v-5M21 21l-7-7M3 21l7-7" />
+                                </svg>
+                                <span class="text-xs font-bold" x-text="counts.compare">0</span>
+                            </a>
+                        </div>
 
                         @auth
                             <div class="hidden items-center gap-2 sm:flex">
@@ -142,6 +288,8 @@
                         <a href="{{ route('vehicles.index') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Browse Cars') }}</a>
                         <a href="{{ route('submit.create') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Sell Your Car') }}</a>
                         <a href="{{ route('contact') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Contact') }}</a>
+                        <a href="{{ route('saved.favourites') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Favourites') }}</a>
+                        <a href="{{ route('saved.compare') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Compare') }}</a>
                         @auth
                             @if (auth()->user()?->isStaff())
                                 <a href="{{ url('/admin') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-950">{{ __('Admin') }}</a>

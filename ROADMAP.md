@@ -329,7 +329,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 5 | Public Storefront | ✅ **Complete** — [report](docs/phases/PHASE_5.md) |
 | 6 | Contact Actions: Call · WhatsApp · Share | ✅ **Complete** — [report](docs/phases/PHASE_6.md) |
 | 7 | Enquiries & Public Submissions | ✅ **Complete** — [report](docs/phases/PHASE_7.md) |
-| 8 | Accounts: Favourites & Compare | ⬜ |
+| 8 | Accounts: Favourites & Compare | ✅ **Complete** — [report](docs/phases/PHASE_8.md) |
 | 9 | Localization (`en` + `si`) | ⬜ |
 | 10 | SEO & Content | ⬜ |
 | 16 | Performance, Hardening & Docs | ⬜ |
@@ -356,3 +356,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-09 | Phase 5 complete — storefront layout + home, Livewire `/vehicles` search (16 URL-synced filters, sort, chips, pagination), `<x-listing.card>`, detail gallery/lightbox/view counter/finance calculator, public spec-sheet PDF; 158 tests green |
 | 2026-10-09 | Phase 6 complete — `<x-listing.contact-actions>` (Call · WhatsApp · Share) on every card + detail seller panel, per-listing → global fallback, `tel:`/`wa.me` normalisation, Alpine share dropdown with copy toast, `ContactNumber` Filament rule; 168 tests green |
 | 2026-10-09 | Phase 7 complete — enquiry forms (honeypot + per-IP throttle + auth prefill + queued team mail), five-step `/submit` wizard writing `vehicle_submissions`, admin reject now demands a reason and emails it to the submitter; 188 tests green |
+| 2026-10-09 | Phase 8 complete — hybrid favourites/compare (guest `localStorage`, signed-in Livewire optimistic toggle), transactional merge on login with de-dupe + cap, `/favourites` and 4-column `/compare` table, header count badges; 198 tests green |

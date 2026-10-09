@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Modules\Accounts\Http\Controllers\SavedVehicleController;
 use App\Modules\Catalog\Http\Controllers\HomeController;
 use App\Modules\Catalog\Http\Controllers\VehicleController;
 use App\Modules\Catalog\Http\Controllers\VehicleExportController;
@@ -29,6 +30,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/favourites', [SavedVehicleController::class, 'favourites'])->name('saved.favourites');
+    Route::get('/compare', [SavedVehicleController::class, 'compare'])->name('saved.compare');
+    Route::post('/saved/merge', [SavedVehicleController::class, 'merge'])->name('saved.merge');
+    Route::delete('/saved/{vehicle}/{type}', [SavedVehicleController::class, 'destroy'])->name('saved.destroy');
 });
 
 Route::prefix('admin')->name('admin.')->middleware([Authenticate::class])->group(function () {

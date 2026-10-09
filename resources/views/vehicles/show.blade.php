@@ -172,6 +172,10 @@
                         </div>
                     </div>
 
+                    <div class="mt-5">
+                        <x-listing.save-actions :vehicle="$vehicle" />
+                    </div>
+
                     <dl class="mt-6 grid grid-cols-1 gap-x-8 gap-y-4 border-t border-slate-100 pt-5 sm:grid-cols-2 dark:border-slate-800">
                         @foreach ($specRows as $label => $value)
                             <div class="flex items-baseline justify-between gap-4 border-b border-dashed border-slate-100 pb-2 dark:border-slate-800">

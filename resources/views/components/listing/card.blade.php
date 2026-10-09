@@ -94,6 +94,10 @@
 
     @isset($favourite)
         <div class="absolute right-3 top-14">{{ $favourite }}</div>
+    @else
+        <div class="absolute right-3 top-14 z-10">
+            <x-listing.save-actions :vehicle="$vehicle" />
+        </div>
     @endisset
 
     @isset($contactActions)
