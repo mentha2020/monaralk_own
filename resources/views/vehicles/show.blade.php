@@ -322,6 +322,8 @@
 
                     <x-listing.contact-actions :vehicle="$vehicle" variant="hero" />
 
+                    @include('partials.enquiry-form', ['vehicle' => $vehicle])
+
                     <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
                         {{ number_format($vehicle->views_count) }} {{ __('people have viewed this car') }}
                     </p>

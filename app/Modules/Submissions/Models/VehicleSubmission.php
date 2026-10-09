@@ -9,10 +9,11 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
 
 class VehicleSubmission extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'user_id',
@@ -62,5 +63,10 @@ class VehicleSubmission extends Model
             SubmissionStatus::Approved,
             SubmissionStatus::Rejected,
         ]);
+    }
+
+    public function reference(): string
+    {
+        return 'SUB-'.str_pad((string) $this->getKey(), 6, '0', STR_PAD_LEFT);
     }
 }

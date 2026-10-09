@@ -60,6 +60,14 @@
                                class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('vehicles.*') ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
                                 {{ __('Browse Cars') }}
                             </a>
+                            <a href="{{ route('submit.create') }}"
+                               class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('submit.*') ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
+                                {{ __('Sell Your Car') }}
+                            </a>
+                            <a href="{{ route('contact') }}"
+                               class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('contact*') ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
+                                {{ __('Contact') }}
+                            </a>
                         </nav>
                     </div>
 
@@ -132,6 +140,8 @@
                     <div :class="{'hidden': ! open, 'block': open}" class="hidden border-t border-slate-200 px-4 py-3 dark:border-slate-800">
                         <a href="{{ route('home') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Home') }}</a>
                         <a href="{{ route('vehicles.index') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Browse Cars') }}</a>
+                        <a href="{{ route('submit.create') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Sell Your Car') }}</a>
+                        <a href="{{ route('contact') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Contact') }}</a>
                         @auth
                             @if (auth()->user()?->isStaff())
                                 <a href="{{ url('/admin') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-950">{{ __('Admin') }}</a>
@@ -172,6 +182,7 @@
                             <li><a href="{{ route('vehicles.index', ['condition' => 'new']) }}" class="text-slate-600 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400">{{ __('Brand new') }}</a></li>
                             <li><a href="{{ route('vehicles.index', ['condition' => 'used']) }}" class="text-slate-600 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400">{{ __('Used cars') }}</a></li>
                             <li><a href="{{ route('vehicles.index', ['sort' => 'price_asc']) }}" class="text-slate-600 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400">{{ __('Most affordable') }}</a></li>
+                            <li><a href="{{ route('submit.create') }}" class="text-slate-600 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400">{{ __('Sell your car') }}</a></li>
                         </ul>
                     </div>
 
@@ -190,6 +201,7 @@
                     <div>
                         <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-900 dark:text-white">{{ __('Contact') }}</h3>
                         <ul class="mt-4 space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                            <li><a href="{{ route('contact') }}" class="transition hover:text-brand-700 dark:hover:text-brand-400">{{ __('Contact us') }}</a></li>
                             @if ($phone = Setting::get('contact.phone'))
                                 <li><a href="tel:{{ preg_replace('/[^0-9+]/', '', $phone) }}" class="transition hover:text-brand-700 dark:hover:text-brand-400">{{ $phone }}</a></li>
                             @endif

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Modules\Submissions\Enums\SubmissionStatus;
 use App\Modules\Submissions\Filament\Resources\SubmissionResource\Pages;
 use App\Modules\Submissions\Models\VehicleSubmission;
+use App\Modules\Submissions\Notifications\SubmissionRejected;
 use App\Modules\Submissions\Services\SubmissionApprover;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -169,11 +170,25 @@ class SubmissionResource extends Resource
                     ->label('Reject')
                     ->icon('heroicon-o-x-mark')
                     ->color('danger')
-                    ->requiresConfirmation()
+                    ->form([
+                        Forms\Components\Textarea::make('reason')
+                            ->label('Reason for rejection')
+                            ->rows(3)
+                            ->required()
+                            ->helperText('The submitter receives this by email, along with the submission reference.'),
+                    ])
                     ->visible(fn (VehicleSubmission $record): bool => ! $record->status->isResolved()
                         && auth()->user()?->can('review', $record) === true)
-                    ->action(function (VehicleSubmission $record, SubmissionApprover $approver): void {
-                        $approver->decide($record, self::approver(), SubmissionStatus::Rejected);
+                    ->action(function (VehicleSubmission $record, array $data, SubmissionApprover $approver): void {
+                        $approver->decide($record, self::approver(), SubmissionStatus::Rejected, $data['reason']);
+
+                        $record->notify(new SubmissionRejected($record, $data['reason']));
+
+                        Notification::make()
+                            ->title('Submission rejected')
+                            ->body('The submitter has been emailed the reason.')
+                            ->danger()
+                            ->send();
                     }),
 
                 Tables\Actions\Action::make('needsChanges')
