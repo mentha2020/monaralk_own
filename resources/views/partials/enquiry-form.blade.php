@@ -1,6 +1,6 @@
 @php($action = isset($vehicle) && $vehicle ? route('vehicles.enquiry', $vehicle) : route('contact.store'))
 @php($account = auth()->user())
-@php($fieldClass = 'block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:placeholder:text-slate-500')
+@php($fieldClass = 'block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-200 dark:placeholder:text-slate-500')
 
 @if (session('status'))
     <div role="status" class="mt-4 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm font-medium text-brand-800 dark:border-brand-900 dark:bg-brand-950 dark:text-brand-300">

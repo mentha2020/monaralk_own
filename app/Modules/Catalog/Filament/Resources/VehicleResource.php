@@ -116,7 +116,9 @@ class VehicleResource extends Resource
                                     ->label('Mileage (km)')
                                     ->numeric()
                                     ->integer()
-                                    ->minValue(0),
+                                    ->minValue(0)
+                                    ->default(0)
+                                    ->dehydrateStateUsing(fn ($state): int => (int) ($state ?? 0)),
 
                                 Forms\Components\TextInput::make('price')
                                     ->label('Price')

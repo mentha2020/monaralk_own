@@ -32,13 +32,13 @@
                         type="search"
                         name="keyword"
                         placeholder="{{ __('Make, model, keyword…') }}"
-                        class="block w-full rounded-xl border-slate-200 text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600"
+                        class="block w-full rounded-xl border-slate-500 text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600"
                     >
                 </div>
 
                 <div class="sm:col-span-4">
                     <label for="hero-make" class="sr-only">{{ __('Make') }}</label>
-                    <select id="hero-make" name="make_id" class="block w-full rounded-xl border-slate-200 text-slate-900 focus:border-brand-600 focus:ring-brand-600">
+                    <select id="hero-make" name="make_id" class="block w-full rounded-xl border-slate-500 text-slate-900 focus:border-brand-600 focus:ring-brand-600">
                         <option value="">{{ __('Any make') }}</option>
                         @foreach ($makes as $make)
                             <option value="{{ $make->id }}">{{ $make->name }}</option>
@@ -48,7 +48,7 @@
 
                 <div class="sm:col-span-2">
                     <label for="hero-price" class="sr-only">{{ __('Max price') }}</label>
-                    <select id="hero-price" name="max_price" class="block w-full rounded-xl border-slate-200 text-slate-900 focus:border-brand-600 focus:ring-brand-600">
+                    <select id="hero-price" name="max_price" class="block w-full rounded-xl border-slate-500 text-slate-900 focus:border-brand-600 focus:ring-brand-600">
                         <option value="">{{ __('Any price') }}</option>
                         <option value="2000000">Under 2M</option>
                         <option value="5000000">Under 5M</option>

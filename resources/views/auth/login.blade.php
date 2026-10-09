@@ -1,4 +1,6 @@
 <x-guest-layout>
+    <h1 class="mb-4 text-xl font-bold text-slate-900 dark:text-white">{{ __('Log in') }}</h1>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -27,7 +29,7 @@
         <!-- Remember Me -->
         <div class="block mt-4">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-brand-600 shadow-sm focus:ring-brand-600 dark:border-slate-600 dark:bg-slate-900" name="remember">
+                <input id="remember_me" type="checkbox" class="rounded border-slate-500 text-brand-600 shadow-sm focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-900" name="remember">
                 <span class="ms-2 text-sm text-gray-600 dark:text-slate-400">{{ __('Remember me') }}</span>
             </label>
         </div>

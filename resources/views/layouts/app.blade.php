@@ -26,6 +26,10 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100 dark:bg-slate-950">
+            <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white">
+                {{ __('Skip to content') }}
+            </a>
+
             @include('layouts.navigation')
 
             @isset($header)
@@ -36,7 +40,7 @@
                 </header>
             @endisset
 
-            <main>
+            <main id="main">
                 {{ $slot }}
             </main>
         </div>

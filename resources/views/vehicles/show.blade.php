@@ -354,17 +354,17 @@
                     <div class="mt-4 space-y-3">
                         <div>
                             <label for="calc-price" class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ __('Price (LKR)') }}</label>
-                            <input id="calc-price" type="number" min="0" step="100000" x-model.number="price" class="block w-full rounded-xl border-slate-300 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                            <input id="calc-price" type="number" min="0" step="100000" x-model.number="price" class="block w-full rounded-xl border-slate-500 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-200">
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
                             <div>
                                 <label for="calc-deposit" class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ __('Deposit') }}</label>
-                                <input id="calc-deposit" type="number" min="0" step="50000" x-model.number="deposit" class="block w-full rounded-xl border-slate-300 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                                <input id="calc-deposit" type="number" min="0" step="50000" x-model.number="deposit" class="block w-full rounded-xl border-slate-500 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-200">
                             </div>
                             <div>
                                 <label for="calc-apr" class="mb-1 block text-xs font-semibold text-slate-500 dark:text-slate-400">{{ __('APR %') }}</label>
-                                <input id="calc-apr" type="number" min="0" max="40" step="0.1" x-model.number="apr" class="block w-full rounded-xl border-slate-300 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
+                                <input id="calc-apr" type="number" min="0" max="40" step="0.1" x-model.number="apr" class="block w-full rounded-xl border-slate-500 text-sm focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-900 dark:text-slate-200">
                             </div>
                         </div>
 

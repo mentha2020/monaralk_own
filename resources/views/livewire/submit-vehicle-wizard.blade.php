@@ -46,7 +46,7 @@
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
                     <label for="make" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Make') }}</label>
-                    <select id="make" wire:model.live="form.make_id" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="make" wire:model.live="form.make_id" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ __('Select a make') }}</option>
                         @foreach ($makes as $make)
                             <option value="{{ $make->id }}">{{ $make->name }}</option>
@@ -57,7 +57,7 @@
 
                 <div>
                     <label for="model" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Model') }}</label>
-                    <select id="model" wire:model="form.model_id" @disabled(! $form['make_id']) class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="model" wire:model="form.model_id" @disabled(! $form['make_id']) class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 disabled:cursor-not-allowed disabled:opacity-60 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ $form['make_id'] ? __('Select a model') : __('Pick a make first') }}</option>
                         @foreach ($models as $model)
                             <option value="{{ $model->id }}">{{ $model->name }}</option>
@@ -68,13 +68,13 @@
 
                 <div>
                     <label for="year" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Year') }}</label>
-                    <input id="year" type="number" min="1950" max="2030" wire:model="form.year" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="year" type="number" min="1950" max="2030" wire:model="form.year" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.year')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="condition" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Condition') }}</label>
-                    <select id="condition" wire:model="form.condition" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="condition" wire:model="form.condition" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="used">{{ __('Used') }}</option>
                         <option value="new">{{ __('Brand new') }}</option>
                     </select>
@@ -83,13 +83,13 @@
 
                 <div class="sm:col-span-2">
                     <label for="location" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Location') }}</label>
-                    <input id="location" type="text" wire:model="form.location" placeholder="{{ __('City or district') }}" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500">
+                    <input id="location" type="text" wire:model="form.location" placeholder="{{ __('City or district') }}" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500">
                     @error('form.location')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="description" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Description') }}</label>
-                    <textarea id="description" rows="5" wire:model="form.description" placeholder="{{ __('Service history, upgrades, reasons for selling…') }}" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500"></textarea>
+                    <textarea id="description" rows="5" wire:model="form.description" placeholder="{{ __('Service history, upgrades, reasons for selling…') }}" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500"></textarea>
                     @error('form.description')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
             </div>
@@ -102,19 +102,19 @@
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
                     <label for="mileage" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Mileage (km)') }}</label>
-                    <input id="mileage" type="number" min="0" step="1" wire:model="form.mileage_km" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="mileage" type="number" min="0" step="1" wire:model="form.mileage_km" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.mileage_km')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="price" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Price (LKR)') }}</label>
-                    <input id="price" type="number" min="100000" step="1000" wire:model="form.price" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="price" type="number" min="100000" step="1000" wire:model="form.price" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.price')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="transmission" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Transmission') }}</label>
-                    <select id="transmission" wire:model="form.transmission_id" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="transmission" wire:model="form.transmission_id" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ __('Select') }}</option>
                         @foreach ($transmissions as $transmission)
                             <option value="{{ $transmission->id }}">{{ $transmission->name }}</option>
@@ -125,7 +125,7 @@
 
                 <div>
                     <label for="fuel" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Fuel') }}</label>
-                    <select id="fuel" wire:model="form.fuel_type_id" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="fuel" wire:model="form.fuel_type_id" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ __('Select') }}</option>
                         @foreach ($fuelTypes as $fuelType)
                             <option value="{{ $fuelType->id }}">{{ $fuelType->name }}</option>
@@ -136,7 +136,7 @@
 
                 <div>
                     <label for="body" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Body type') }}</label>
-                    <select id="body" wire:model="form.body_type_id" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="body" wire:model="form.body_type_id" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ __('Optional') }}</option>
                         @foreach ($bodyTypes as $bodyType)
                             <option value="{{ $bodyType->id }}">{{ $bodyType->name }}</option>
@@ -147,7 +147,7 @@
 
                 <div>
                     <label for="color" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Exterior colour') }}</label>
-                    <select id="color" wire:model="form.exterior_color_id" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <select id="color" wire:model="form.exterior_color_id" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                         <option value="">{{ __('Optional') }}</option>
                         @foreach ($colors as $color)
                             <option value="{{ $color->id }}">{{ $color->name }}</option>
@@ -158,19 +158,19 @@
 
                 <div>
                     <label for="trim" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Trim') }}</label>
-                    <input id="trim" type="text" wire:model="form.trim" placeholder="{{ __('G, GT, EX…') }}" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500">
+                    <input id="trim" type="text" wire:model="form.trim" placeholder="{{ __('G, GT, EX…') }}" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200 dark:placeholder:text-slate-500">
                     @error('form.trim')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="registration" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Registration number') }}</label>
-                    <input id="registration" type="text" wire:model="form.registration_number" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="registration" type="text" wire:model="form.registration_number" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.registration_number')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="owners" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Previous owners') }}</label>
-                    <input id="owners" type="number" min="1" max="10" wire:model="form.owners_count" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="owners" type="number" min="1" max="10" wire:model="form.owners_count" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.owners_count')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
             </div>
@@ -180,7 +180,7 @@
             <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Add photos') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 3 of 5 — up to :count photos, 5 MB each. JPG, PNG or WebP.', ['count' => \App\Livewire\SubmitVehicleWizard::MAX_PHOTOS]) }}</p>
 
-            <label for="photos" class="mt-6 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-brand-500">
+            <label for="photos" class="mt-6 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-500 bg-slate-50 px-6 py-8 text-center transition hover:border-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:hover:border-brand-500">
                 <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ __('Choose photos') }}</span>
                 <span class="mt-1 text-xs text-slate-500 dark:text-slate-400">{{ __('Drag and drop works too') }}</span>
                 <input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple wire:model="photos" class="sr-only">
@@ -225,19 +225,19 @@
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
                     <label for="submit-name" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Name') }}</label>
-                    <input id="submit-name" type="text" wire:model="form.name" autocomplete="name" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="submit-name" type="text" wire:model="form.name" autocomplete="name" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.name')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
                     <label for="submit-email" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Email') }}</label>
-                    <input id="submit-email" type="email" wire:model="form.email" autocomplete="email" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="submit-email" type="email" wire:model="form.email" autocomplete="email" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.email')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
 
                 <div class="sm:col-span-2">
                     <label for="submit-phone" class="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{{ __('Phone') }} <span class="font-normal normal-case tracking-normal">({{ __('optional') }})</span></label>
-                    <input id="submit-phone" type="tel" wire:model="form.phone" autocomplete="tel" class="block w-full rounded-xl border-slate-300 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                    <input id="submit-phone" type="tel" wire:model="form.phone" autocomplete="tel" class="block w-full rounded-xl border-slate-500 bg-white text-sm text-slate-900 focus:border-brand-600 focus:ring-brand-600 dark:border-slate-400 dark:bg-slate-950 dark:text-slate-200">
                     @error('form.phone')<p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p>@enderror
                 </div>
             </div>
@@ -285,7 +285,7 @@
         @endif
 
         <div class="mt-8 flex items-center justify-between gap-3 border-t border-slate-100 pt-6 dark:border-slate-800">
-            <button type="button" wire:click="back" @disabled($step === 1) class="inline-flex min-h-11 items-center justify-center rounded-xl border-2 border-slate-300 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-600 dark:text-slate-200 dark:hover:border-white dark:hover:text-white">
+            <button type="button" wire:click="back" @disabled($step === 1) class="inline-flex min-h-11 items-center justify-center rounded-xl border-2 border-slate-500 px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-900 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-400 dark:text-slate-200 dark:hover:border-white dark:hover:text-white">
                 {{ __('Back') }}
             </button>
 

@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Monaralk') }}</title>
+        <meta name="robots" content="noindex, nofollow">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -26,6 +27,10 @@
     </head>
     <body class="font-sans text-slate-900 antialiased dark:text-slate-100">
         <div class="relative min-h-screen">
+            <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white">
+                {{ __('Skip to content') }}
+            </a>
+
             <div class="absolute inset-0 bg-gradient-to-b from-brand-100 via-brand-50 to-brand-50 dark:from-slate-900 dark:via-slate-950 dark:to-slate-950"></div>
 
             <button
@@ -43,7 +48,7 @@
                 </svg>
             </button>
 
-            <div class="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
+            <div id="main" class="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
                 <a href="{{ url('/') }}" class="mb-6 flex flex-col items-center gap-3 focus:outline-none focus:ring-2 focus:ring-brand-600 rounded-xl">
                     <x-application-logo wordmark class="scale-125" />
                     <span class="text-sm font-medium text-brand-800 dark:text-brand-300">{{ __('Sri Lanka\'s car marketplace') }}</span>

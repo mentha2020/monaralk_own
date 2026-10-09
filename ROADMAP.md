@@ -333,7 +333,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 9 | Localization (`en` + `si`) | ✅ **Complete** — [report](docs/phases/PHASE_9.md) |
 | 10 | SEO & Content | ✅ **Complete** — [report](docs/phases/PHASE_10.md) |
 | 16 | Performance, Hardening & Docs | ✅ **Complete** — [report](docs/phases/PHASE_16.md) |
-| 17 | QA, Testing & Release Readiness | ⬜ |
+| 17 | QA, Testing & Release Readiness | ✅ **Complete** — [report](docs/phases/PHASE_17.md) |
 | 11 | REST API v1 — *held* | 🔒 held |
 | 12–15 | Mobile app (Flutter) — *held* | 🔒 held |
 
@@ -360,3 +360,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-09 | Phase 9 complete — `en` + `si` localization: 255 Sinhala strings, `SetLocale` middleware (session/cookie, admin pinned to English), header language switcher, Sinhala validation/pagination messages, locale-aware dates with LKR unchanged, `lang/api/{en,si}.json` exports; 207 tests green |
 | 2026-10-09 | Phase 10 complete — `<x-seo>` head component (title/description/canonical/robots + OpenGraph + Twitter card), 1200×630 social crop (`vehicle_images.path_og`) with `og:type=product` price tags, `Car` JSON-LD on the detail page, app-served `/sitemap.xml` + `/robots.txt`, `/pages/{slug}` static pages with footer links, branded 404/500, `alt`/`lazy`/single-`h1` audit; 221 tests green |
 | 2026-10-09 | Phase 16 complete — versioned observer-invalidated listing + filter-option cache (`file` store), N+1/paging invariance tests, covering indexes on `enquiries` + `vehicle_submissions`, queued image variants, WebP variants with CDN-ready disk config, global security headers + CSP covering 404s, auth/wizard rate limits + honeypot, upload MIME/size rejection tests, XSS + secrets audit, project-specific `.env.example` + README, `optimize` smoke; 237 tests green |
+| 2026-10-09 | Phase 17 complete — QA pass: skip links and a single `<h1>` on every page, `noindex` on auth, WCAG contrast proven with a real `oklch` pipeline (form borders 1.48:1 -> 4.77:1 light, 1.73:1 -> 6.79:1 dark), markup-invariant + end-to-end smoke + performance-budget suites, suite made build-independent via `withoutVite()`, fixed a Filament `mileage_km` null-into-NOT-NULL 500, `docs/qa-checklists.md` + `docs/deploy-checklist.md`; 326 tests green |
