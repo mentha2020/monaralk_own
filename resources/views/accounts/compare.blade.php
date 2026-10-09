@@ -4,6 +4,8 @@
 
 @section('description', __('Put up to :cap cars side by side and see the differences in one table.', ['cap' => $cap]))
 
+@section('robots', 'noindex, nofollow')
+
 @section('content')
     @php
         $rows = [

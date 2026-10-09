@@ -246,6 +246,11 @@
                                     </a>
                                 @endif
 
+                                <a href="{{ route('dashboard') }}"
+                                   class="rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('dashboard') ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+
                                 <a href="{{ route('profile.edit') }}"
                                    class="rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white">
                                     {{ auth()->user()->name }}
@@ -302,6 +307,7 @@
                             @if (auth()->user()?->isStaff())
                                 <a href="{{ url('/admin') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-950">{{ __('Admin') }}</a>
                             @endif
+                            <a href="{{ route('dashboard') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Dashboard') }}</a>
                             <a href="{{ route('profile.edit') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Profile') }}</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf

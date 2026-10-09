@@ -4,6 +4,8 @@
 
 @section('description', __('The cars you saved on :site.', ['site' => Setting::get('site.name', 'Monaralk')]))
 
+@section('robots', 'noindex, nofollow')
+
 @section('content')
     <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
         <div class="flex flex-wrap items-end justify-between gap-4">

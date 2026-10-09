@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Modules\Accounts\Http\Controllers\DashboardController;
 use App\Modules\Accounts\Http\Controllers\SavedVehicleController;
 use App\Modules\Catalog\Http\Controllers\HomeController;
 use App\Modules\Catalog\Http\Controllers\VehicleController;
@@ -32,9 +33,9 @@ Route::view('/submit', 'submit.create')->name('submit.create');
 
 Route::get('/pages/{page}', [PageController::class, 'show'])->name('pages.show');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
