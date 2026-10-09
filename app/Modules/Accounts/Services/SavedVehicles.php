@@ -154,8 +154,8 @@ class SavedVehicles
     public static function capMessage(SavedType $type): string
     {
         return match ($type) {
-            SavedType::Compare => 'Compare is limited to '.self::COMPARE_CAP.' cars.',
-            SavedType::Favourite => 'You have reached the maximum of '.self::FAVOURITE_CAP.' favourites.',
+            SavedType::Compare => __('Compare is limited to :count cars.', ['count' => self::COMPARE_CAP]),
+            SavedType::Favourite => __('You have reached the maximum of :count favourites.', ['count' => self::FAVOURITE_CAP]),
         };
     }
 }

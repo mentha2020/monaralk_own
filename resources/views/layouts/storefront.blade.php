@@ -36,6 +36,9 @@
             window.Monaralk = {
                 keys: { favourite: 'monaralk.favourites', compare: 'monaralk.compare' },
                 cap: {{ \App\Modules\Accounts\Services\SavedVehicles::COMPARE_CAP }},
+                i18n: {
+                    compareFull: {{ \Illuminate\Support\Js::from(__('Compare is limited to :count cars.', ['count' => '{count}'])) }},
+                },
                 get: function (type) {
                     try {
                         return JSON.parse(localStorage.getItem(this.keys[type])) || [];
@@ -139,7 +142,7 @@
                         notice: '',
                         toggle: function (type) {
                             if (type === 'compare' && !this.compare && window.Monaralk.get('compare').length >= window.Monaralk.cap) {
-                                this.notice = 'Compare is limited to ' + window.Monaralk.cap + ' cars.';
+                                this.notice = window.Monaralk.i18n.compareFull.replace('{count}', window.Monaralk.cap);
 
                                 return;
                             }
@@ -161,7 +164,7 @@
     <body class="font-sans antialiased bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-200" data-saved-merge="{{ auth()->check() ? '1' : '0' }}">
         <div class="min-h-screen flex flex-col">
             <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white">
-                Skip to content
+                {{ __('Skip to content') }}
             </a>
 
             <header x-data="{ open: false }" class="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
@@ -195,6 +198,19 @@
                     </div>
 
                     <div class="flex items-center gap-1 sm:gap-2">
+                        <nav class="hidden items-center gap-1 sm:flex" aria-label="{{ __('Language') }}">
+                            <a href="{{ route('language.switch', 'en') }}"
+                               aria-current="{{ app()->getLocale() === 'en' ? 'true' : 'false' }}"
+                               class="rounded-lg px-2 py-1.5 text-xs font-bold transition {{ app()->getLocale() === 'en' ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
+                                EN
+                            </a>
+                            <a href="{{ route('language.switch', 'si') }}"
+                               aria-current="{{ app()->getLocale() === 'si' ? 'true' : 'false' }}"
+                               class="rounded-lg px-2 py-1.5 text-xs font-bold transition {{ app()->getLocale() === 'si' ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white' }}">
+                                සිං
+                            </a>
+                        </nav>
+
                         <button
                             type="button"
                             data-theme-toggle
@@ -290,6 +306,10 @@
                         <a href="{{ route('contact') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Contact') }}</a>
                         <a href="{{ route('saved.favourites') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Favourites') }}</a>
                         <a href="{{ route('saved.compare') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5">{{ __('Compare') }}</a>
+                        <div class="flex items-center gap-2 border-t border-slate-200 pt-3 dark:border-slate-800" aria-label="{{ __('Language') }}">
+                            <a href="{{ route('language.switch', 'en') }}" aria-current="{{ app()->getLocale() === 'en' ? 'true' : 'false' }}" class="rounded-lg px-3 py-2 text-base font-bold {{ app()->getLocale() === 'en' ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5' }}">EN</a>
+                            <a href="{{ route('language.switch', 'si') }}" aria-current="{{ app()->getLocale() === 'si' ? 'true' : 'false' }}" class="rounded-lg px-3 py-2 text-base font-bold {{ app()->getLocale() === 'si' ? 'bg-brand-50 text-brand-800 dark:bg-brand-950 dark:text-brand-300' : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5' }}">සිං</a>
+                        </div>
                         @auth
                             @if (auth()->user()?->isStaff())
                                 <a href="{{ url('/admin') }}" class="block rounded-lg px-3 py-2 text-base font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-950">{{ __('Admin') }}</a>

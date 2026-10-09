@@ -7,10 +7,13 @@ use App\Modules\Catalog\Http\Controllers\VehicleController;
 use App\Modules\Catalog\Http\Controllers\VehicleExportController;
 use App\Modules\Catalog\Http\Controllers\VehicleSpecSheetController;
 use App\Modules\Leads\Http\Controllers\EnquiryController;
+use App\Modules\Shared\Http\Controllers\LanguageController;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/language/{locale}', LanguageController::class)->name('language.switch');
 
 Route::get('/vehicles', [VehicleController::class, 'index'])->name('vehicles.index');
 Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show'])->name('vehicles.show');

@@ -33,7 +33,7 @@
             __('Owners') => $vehicle->owners_count,
             __('Accident history') => $vehicle->accident_history,
             __('Warranty') => $vehicle->warranty,
-            __('Last serviced') => optional($vehicle->last_service_date)->format('d M Y'),
+            __('Last serviced') => optional($vehicle->last_service_date)?->isoFormat('D MMM YYYY'),
         ], fn ($value) => filled($value));
 
         $financeRows = array_filter([
