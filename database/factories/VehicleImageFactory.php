@@ -19,6 +19,7 @@ class VehicleImageFactory extends Factory
             'path' => $path,
             'path_800w' => str_replace('.jpg', '-800w.jpg', $path),
             'path_1600w' => str_replace('.jpg', '-1600w.jpg', $path),
+            'path_og' => str_replace('.jpg', '-og.jpg', $path),
             'alt' => fake()->sentence(3),
             'is_cover' => false,
             'sort_order' => 1,

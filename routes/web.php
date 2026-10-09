@@ -7,11 +7,16 @@ use App\Modules\Catalog\Http\Controllers\VehicleController;
 use App\Modules\Catalog\Http\Controllers\VehicleExportController;
 use App\Modules\Catalog\Http\Controllers\VehicleSpecSheetController;
 use App\Modules\Leads\Http\Controllers\EnquiryController;
+use App\Modules\Settings\Http\Controllers\PageController;
 use App\Modules\Shared\Http\Controllers\LanguageController;
+use App\Modules\Shared\Http\Controllers\SeoController;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
 Route::get('/language/{locale}', LanguageController::class)->name('language.switch');
 
@@ -24,6 +29,8 @@ Route::post('/contact', [EnquiryController::class, 'store'])->middleware('thrott
 Route::post('/vehicles/{vehicle}/enquiry', [EnquiryController::class, 'storeForVehicle'])->middleware('throttle:enquiries')->name('vehicles.enquiry');
 
 Route::view('/submit', 'submit.create')->name('submit.create');
+
+Route::get('/pages/{page}', [PageController::class, 'show'])->name('pages.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

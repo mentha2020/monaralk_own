@@ -5,19 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>@yield('title', config('app.name', 'Monaralk'))</title>
-
-        @hasSection('description')
-            <meta name="description" content="@yield('description')">
-        @endif
-        @hasSection('canonical')
-            <link rel="canonical" href="@yield('canonical')">
-        @endif
-        <meta property="og:site_name" content="{{ Setting::get('site.name', 'Monaralk') }}">
-        <meta property="og:type" content="website">
-        @hasSection('title')
-            <meta property="og:title" content="@yield('title')">
-        @endif
+        <x-seo />
 
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
@@ -341,6 +329,11 @@
                         <p class="mt-4 max-w-sm text-sm leading-6 text-slate-500 dark:text-slate-400">
                             {{ Setting::get('site.tagline', "Sri Lanka's trusted car marketplace") }}
                         </p>
+                        <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+                            @foreach (\App\Modules\Settings\Models\Page::published()->orderBy('title')->get() as $footerPage)
+                                <li><a href="{{ route('pages.show', $footerPage) }}" class="text-slate-600 transition hover:text-brand-700 dark:text-slate-400 dark:hover:text-brand-400">{{ $footerPage->title }}</a></li>
+                            @endforeach
+                        </ul>
                     </div>
 
                     <div>

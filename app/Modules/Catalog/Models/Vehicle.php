@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Vehicle extends Model
@@ -217,6 +218,21 @@ class Vehicle extends Model
     protected function formattedPrice(): Attribute
     {
         return Attribute::get(fn (): string => 'LKR '.number_format((float) $this->price, 0));
+    }
+
+    protected function ogImage(): Attribute
+    {
+        return Attribute::get(function (): ?string {
+            $cover = $this->coverImage;
+
+            if ($cover === null) {
+                return null;
+            }
+
+            $path = $cover->path_og ?: $cover->path_1600w ?: $cover->path;
+
+            return filled($path) ? Storage::disk('public')->url($path) : null;
+        });
     }
 
     public function scopePublished(Builder $query): Builder

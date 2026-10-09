@@ -38,7 +38,7 @@
 
     <div class="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900 sm:p-8">
         @if ($step === 1)
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Tell us about your car') }}</h1>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Tell us about your car') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 1 of 5 — the basics. You can review everything before it is sent.') }}</p>
 
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -94,7 +94,7 @@
         @endif
 
         @if ($step === 2)
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Specs and price') }}</h1>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Specs and price') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 2 of 5 — numbers buyers filter on. Price is in Sri Lankan Rupees.') }}</p>
 
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -175,7 +175,7 @@
         @endif
 
         @if ($step === 3)
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Add photos') }}</h1>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Add photos') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 3 of 5 — up to :count photos, 5 MB each. JPG, PNG or WebP.', ['count' => \App\Livewire\SubmitVehicleWizard::MAX_PHOTOS]) }}</p>
 
             <label for="photos" class="mt-6 flex min-h-32 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center transition hover:border-brand-600 dark:border-slate-700 dark:bg-slate-950 dark:hover:border-brand-500">
@@ -199,7 +199,7 @@
                 <ul class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
                     @foreach ($photos as $index => $photo)
                         <li class="relative overflow-hidden rounded-xl ring-1 ring-slate-200 dark:ring-slate-700">
-                            <img src="{{ $photo->temporaryUrl() }}" alt="" class="aspect-[4/3] w-full object-cover">
+                            <img src="{{ $photo->temporaryUrl() }}" alt="" loading="lazy" decoding="async" class="aspect-[4/3] w-full object-cover">
                             <button type="button" wire:click="removePhoto({{ $index }})" class="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow transition hover:bg-white dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-900" aria-label="{{ __('Remove photo') }}">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
                             </button>
@@ -213,7 +213,7 @@
         @endif
 
         @if ($step === 4)
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('How can we reach you?') }}</h1>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('How can we reach you?') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 4 of 5 — our team contacts you before anything goes public.') }}</p>
 
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
@@ -238,7 +238,7 @@
         @endif
 
         @if ($step === 5)
-            <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Review and submit') }}</h1>
+            <h2 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ __('Review and submit') }}</h2>
             <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">{{ __('Step 5 of 5 — check everything is right. You can go back and edit any step.') }}</p>
 
             <dl class="mt-6 grid gap-x-6 gap-y-4 sm:grid-cols-2">
@@ -261,7 +261,7 @@
                     <ul class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
                         @foreach ($photos as $photo)
                             <li class="overflow-hidden rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                                <img src="{{ $photo->temporaryUrl() }}" alt="" class="aspect-square w-full object-cover">
+                                <img src="{{ $photo->temporaryUrl() }}" alt="" loading="lazy" decoding="async" class="aspect-square w-full object-cover">
                             </li>
                         @endforeach
                     </ul>

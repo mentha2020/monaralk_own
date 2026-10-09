@@ -4,6 +4,63 @@
 
 @section('description', $vehicle->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($vehicle->description ?? ''), 155))
 
+@section('canonical', route('vehicles.show', $vehicle))
+
+@section('og:type', 'product')
+
+@if ($vehicle->ogImage)
+    @section('og:image', $vehicle->ogImage)
+    @section('og:image:alt', $vehicle->listingTitle())
+    @if ($vehicle->coverImage?->path_og)
+        @section('og:image:width', 1200)
+        @section('og:image:height', 630)
+    @endif
+@endif
+
+@section('og:price:amount', number_format((float) $vehicle->price, 0, '.', ''))
+@section('og:price:currency', 'LKR')
+
+@php
+    $conditionSchema = match ($vehicle->condition?->value) {
+        'new' => 'https://schema.org/NewCondition',
+        'certified_pre_owned' => 'https://schema.org/UsedCondition',
+        default => 'https://schema.org/UsedCondition',
+    };
+
+    $jsonLd = array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Car',
+        'name' => $vehicle->listingTitle(),
+        'url' => route('vehicles.show', $vehicle),
+        'description' => $vehicle->meta_description ?: \Illuminate\Support\Str::limit(strip_tags($vehicle->description ?? ''), 155),
+        'sku' => $vehicle->slug,
+        'brand' => filled($vehicle->make?->name) ? ['@type' => 'Brand', 'name' => $vehicle->make->name] : null,
+        'model' => $vehicle->model?->name,
+        'vehicleModelDate' => (string) $vehicle->year,
+        'vehicleConfiguration' => $vehicle->trim,
+        'bodyType' => $vehicle->bodyType?->name,
+        'color' => $vehicle->exteriorColor?->name,
+        'fuelType' => $vehicle->fuelType?->name,
+        'vehicleTransmission' => $vehicle->transmission?->name,
+        'itemCondition' => $conditionSchema,
+        'mileageFromOdometer' => ['@type' => 'QuantitativeValue', 'value' => (int) $vehicle->mileage_km, 'unitCode' => 'KMT'],
+        'image' => $gallery->map(fn ($image) => \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_1600w ?: $image->path))->all(),
+        'offers' => [
+            '@type' => 'Offer',
+            'url' => route('vehicles.show', $vehicle),
+            'priceCurrency' => 'LKR',
+            'price' => number_format((float) $vehicle->price, 0, '.', ''),
+            'availability' => $vehicle->isSold() ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+            'itemCondition' => $conditionSchema,
+            'seller' => ['@type' => 'Organization', 'name' => Setting::get('site.name', 'Monaralk')],
+        ],
+    ], fn ($value) => $value !== null && $value !== '');
+@endphp
+
+@push('head')
+    <script type="application/ld+json">{!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}</script>
+@endpush
+
 @section('content')
     @php
         $title = trim(implode(' ', array_filter([

@@ -45,6 +45,37 @@ test('storing a photo writes the original plus both width variants', function ()
         ->and($image->alt)->toBe('A grey hatchback');
 });
 
+test('generating variants also writes the 1200x630 social image', function () {
+    $vehicle = Vehicle::factory()->create();
+
+    $image = $this->service->store($vehicle, UploadedFile::fake()->image('car.jpg', 2400, 1600));
+
+    $storage = Storage::disk('public');
+    $ogPath = $this->service->variantPath($image->path, '-og');
+
+    expect($storage->exists($ogPath))->toBeTrue()
+        ->and($image->refresh()->path_og)->toBe($ogPath);
+
+    [$width, $height] = getimagesize($storage->path($ogPath));
+
+    expect($width)->toBe(VehicleImageService::OG_WIDTH)
+        ->and($height)->toBe(VehicleImageService::OG_HEIGHT);
+});
+
+test('deleting an image removes the social image too', function () {
+    $vehicle = Vehicle::factory()->create();
+    $image = $this->service->store($vehicle, UploadedFile::fake()->image('car.jpg', 1200, 800));
+
+    $ogPath = $image->refresh()->path_og;
+
+    expect($ogPath)->not->toBeNull()
+        ->and(Storage::disk('public')->exists($ogPath))->toBeTrue();
+
+    $image->delete();
+
+    expect(Storage::disk('public')->exists($ogPath))->toBeFalse();
+});
+
 test('creating an image row generates its variants through the observer', function () {
     $vehicle = Vehicle::factory()->create();
     $storage = Storage::disk('public');

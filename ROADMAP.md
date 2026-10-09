@@ -331,7 +331,7 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 7 | Enquiries & Public Submissions | ✅ **Complete** — [report](docs/phases/PHASE_7.md) |
 | 8 | Accounts: Favourites & Compare | ✅ **Complete** — [report](docs/phases/PHASE_8.md) |
 | 9 | Localization (`en` + `si`) | ✅ **Complete** — [report](docs/phases/PHASE_9.md) |
-| 10 | SEO & Content | ⬜ |
+| 10 | SEO & Content | ✅ **Complete** — [report](docs/phases/PHASE_10.md) |
 | 16 | Performance, Hardening & Docs | ⬜ |
 | 17 | QA, Testing & Release Readiness | ⬜ |
 | 11 | REST API v1 — *held* | 🔒 held |
@@ -358,3 +358,4 @@ Mobile app (Part C) · Filament custom theme · Laravel Scout/full-text search �
 | 2026-10-09 | Phase 7 complete — enquiry forms (honeypot + per-IP throttle + auth prefill + queued team mail), five-step `/submit` wizard writing `vehicle_submissions`, admin reject now demands a reason and emails it to the submitter; 188 tests green |
 | 2026-10-09 | Phase 8 complete — hybrid favourites/compare (guest `localStorage`, signed-in Livewire optimistic toggle), transactional merge on login with de-dupe + cap, `/favourites` and 4-column `/compare` table, header count badges; 198 tests green |
 | 2026-10-09 | Phase 9 complete — `en` + `si` localization: 255 Sinhala strings, `SetLocale` middleware (session/cookie, admin pinned to English), header language switcher, Sinhala validation/pagination messages, locale-aware dates with LKR unchanged, `lang/api/{en,si}.json` exports; 207 tests green |
+| 2026-10-09 | Phase 10 complete — `<x-seo>` head component (title/description/canonical/robots + OpenGraph + Twitter card), 1200×630 social crop (`vehicle_images.path_og`) with `og:type=product` price tags, `Car` JSON-LD on the detail page, app-served `/sitemap.xml` + `/robots.txt`, `/pages/{slug}` static pages with footer links, branded 404/500, `alt`/`lazy`/single-`h1` audit; 221 tests green |

@@ -22,6 +22,10 @@ class VehicleImageService
         '-1600w' => 1600,
     ];
 
+    public const OG_WIDTH = 1200;
+
+    public const OG_HEIGHT = 630;
+
     public function store(Vehicle $vehicle, UploadedFile $file, ?string $alt = null, bool $isCover = false, ?int $sortOrder = null): VehicleImage
     {
         return DB::transaction(function () use ($vehicle, $file, $alt, $isCover, $sortOrder) {
@@ -123,6 +127,12 @@ class VehicleImageService
             $updated[$suffix === '-800w' ? 'path_800w' : 'path_1600w'] = $variantPath;
         }
 
+        $ogPath = $this->variantPath($image->path, '-og');
+
+        if ($this->generateOgImage($gd, $width, $height, $ogPath)) {
+            $updated['path_og'] = $ogPath;
+        }
+
         imagedestroy($gd);
 
         $image->forceFill($updated)->saveQuietly();
@@ -131,7 +141,7 @@ class VehicleImageService
     public function purge(VehicleImage $image): void
     {
         DB::transaction(function () use ($image) {
-            $this->deleteFiles($image->getOriginal('path'), $image->getOriginal('path_800w'), $image->getOriginal('path_1600w'));
+            $this->deleteFiles($image->getOriginal('path'), $image->getOriginal('path_800w'), $image->getOriginal('path_1600w'), $image->getOriginal('path_og'));
         });
     }
 
@@ -164,6 +174,38 @@ class VehicleImageService
         $basename = pathinfo($path, PATHINFO_FILENAME);
 
         return ($directory === '.' ? '' : $directory.'/').$basename.$suffix.'.jpg';
+    }
+
+    private function generateOgImage($gd, int $width, int $height, string $ogPath): bool
+    {
+        if ($width < 1 || $height < 1) {
+            return false;
+        }
+
+        $scale = max(self::OG_WIDTH / $width, self::OG_HEIGHT / $height);
+        $cropWidth = max(1, (int) round(self::OG_WIDTH / $scale));
+        $cropHeight = max(1, (int) round(self::OG_HEIGHT / $scale));
+        $cropX = max(0, (int) (($width - $cropWidth) / 2));
+        $cropY = max(0, (int) (($height - $cropHeight) / 2));
+        $cropWidth = max(1, min($cropWidth, $width - $cropX));
+        $cropHeight = max(1, min($cropHeight, $height - $cropY));
+
+        $canvas = imagecreatetruecolor(self::OG_WIDTH, self::OG_HEIGHT);
+        imagecopyresampled($canvas, $gd, 0, 0, $cropX, $cropY, self::OG_WIDTH, self::OG_HEIGHT, $cropWidth, $cropHeight);
+
+        ob_start();
+        imagejpeg($canvas, null, 85);
+        $binary = ob_get_clean();
+
+        imagedestroy($canvas);
+
+        if ($binary === '') {
+            return false;
+        }
+
+        Storage::disk(self::DISK)->put($ogPath, $binary);
+
+        return true;
     }
 
     /**
