@@ -91,3 +91,17 @@ test('a reviewer without the submission.review permission cannot act on a submis
         ->assertTableActionHidden('reject', $submission)
         ->assertTableActionHidden('approve', $submission);
 });
+
+test('the submission edit page renders its submitted values and photos as html', function () {
+    $submission = VehicleSubmission::factory()->create([
+        'data' => ['make' => 'Toyota', 'model' => 'Aqua'],
+        'images' => ['submissions/1/aqua-1.jpg'],
+    ]);
+
+    $this->actingAs(staff('admin'))
+        ->get("/admin/submissions/{$submission->getKey()}/edit")
+        ->assertOk()
+        ->assertSee('Toyota', false)
+        ->assertSee('<strong>Make</strong>', false)
+        ->assertSee('aqua-1.jpg', false);
+});

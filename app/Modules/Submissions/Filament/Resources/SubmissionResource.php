@@ -14,8 +14,10 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
 use RuntimeException;
 use Throwable;
@@ -72,19 +74,17 @@ class SubmissionResource extends Resource
                 ->schema([
                     Forms\Components\Placeholder::make('data_view')
                         ->label('Submitted values')
-                        ->allowHtml()
                         ->columnSpanFull()
-                        ->content(fn (VehicleSubmission $record): string => collect($record->data ?? [])
+                        ->content(fn (VehicleSubmission $record): Htmlable => new HtmlString(collect($record->data ?? [])
                             ->map(fn ($value, $key) => '<strong>'.e(Str::headline((string) $key)).'</strong>: '.e(is_array($value) ? implode(', ', $value) : (string) $value))
-                            ->implode('<br>')),
+                            ->implode('<br>'))),
 
                     Forms\Components\Placeholder::make('images_view')
                         ->label('Photos')
-                        ->allowHtml()
                         ->columnSpanFull()
-                        ->content(fn (VehicleSubmission $record): string => collect($record->images ?? [])
+                        ->content(fn (VehicleSubmission $record): Htmlable => new HtmlString(collect($record->images ?? [])
                             ->map(fn (string $path) => '<img src="'.e(Storage::disk('public')->url($path)).'" alt="" class="h-24 w-36 rounded-lg object-cover">')
-                            ->implode(' ') ?: '<span class="text-sm text-gray-500">No photos attached.</span>'),
+                            ->implode(' ') ?: '<span class="text-sm text-gray-500">No photos attached.</span>')),
                 ])->columns(1),
 
             Forms\Components\Section::make('Review')
