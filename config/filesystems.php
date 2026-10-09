@@ -1,5 +1,8 @@
 <?php
 
+$cdnUrl = rtrim((string) env('CDN_URL', ''), '/');
+$assetBase = $cdnUrl !== '' ? $cdnUrl : rtrim((string) env('APP_URL', ''), '/');
+
 return [
 
     /*
@@ -41,7 +44,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => $assetBase.'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

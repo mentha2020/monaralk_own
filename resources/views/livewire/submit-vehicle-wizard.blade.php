@@ -20,6 +20,8 @@
         </div>
     @else
 
+    <input type="text" wire:model="website" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" class="pointer-events-none absolute -left-[9999px] h-px w-px border-0 p-0 opacity-0">
+
     <div class="mb-8">
         <ol class="flex flex-wrap items-center gap-2 text-xs font-semibold">
             @foreach ($steps as $number => $label)
@@ -199,7 +201,11 @@
                 <ul class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
                     @foreach ($photos as $index => $photo)
                         <li class="relative overflow-hidden rounded-xl ring-1 ring-slate-200 dark:ring-slate-700">
-                            <img src="{{ $photo->temporaryUrl() }}" alt="" loading="lazy" decoding="async" class="aspect-[4/3] w-full object-cover">
+                            @if ($this->photoPreviewUrl($photo))
+                                <img src="{{ $this->photoPreviewUrl($photo) }}" alt="" loading="lazy" decoding="async" class="aspect-[4/3] w-full object-cover">
+                            @else
+                                <div class="aspect-[4/3] w-full bg-slate-100 dark:bg-slate-800"></div>
+                            @endif
                             <button type="button" wire:click="removePhoto({{ $index }})" class="absolute right-2 top-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow transition hover:bg-white dark:bg-slate-900/90 dark:text-slate-200 dark:hover:bg-slate-900" aria-label="{{ __('Remove photo') }}">
                                 <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
                             </button>
@@ -261,7 +267,11 @@
                     <ul class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
                         @foreach ($photos as $photo)
                             <li class="overflow-hidden rounded-lg ring-1 ring-slate-200 dark:ring-slate-700">
-                                <img src="{{ $photo->temporaryUrl() }}" alt="" loading="lazy" decoding="async" class="aspect-square w-full object-cover">
+                                @if ($this->photoPreviewUrl($photo))
+                                    <img src="{{ $this->photoPreviewUrl($photo) }}" alt="" loading="lazy" decoding="async" class="aspect-square w-full object-cover">
+                                @else
+                                    <div class="aspect-square w-full bg-slate-100 dark:bg-slate-800"></div>
+                                @endif
                             </li>
                         @endforeach
                     </ul>

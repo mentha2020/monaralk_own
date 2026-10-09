@@ -45,6 +45,26 @@ test('storing a photo writes the original plus both width variants', function ()
         ->and($image->alt)->toBe('A grey hatchback');
 });
 
+test('generating variants also writes webp renditions', function () {
+    $vehicle = Vehicle::factory()->create();
+
+    $image = $this->service->store($vehicle, UploadedFile::fake()->image('car.jpg', 2400, 1600));
+    $image->refresh();
+
+    $storage = Storage::disk('public');
+
+    foreach (['path_800w_webp' => '-800w', 'path_1600w_webp' => '-1600w'] as $column => $suffix) {
+        $path = $image->{$column};
+
+        expect($path)->toBe($this->service->variantPath($image->path, $suffix, 'webp'))
+            ->and($storage->exists($path))->toBeTrue();
+
+        $info = getimagesize($storage->path($path));
+
+        expect($info['mime'])->toBe('image/webp');
+    }
+});
+
 test('generating variants also writes the 1200x630 social image', function () {
     $vehicle = Vehicle::factory()->create();
 
@@ -115,6 +135,8 @@ test('deleting an image removes the original and every variant', function () {
         $image->path,
         $this->service->variantPath($image->path, '-800w'),
         $this->service->variantPath($image->path, '-1600w'),
+        $this->service->variantPath($image->path, '-800w', 'webp'),
+        $this->service->variantPath($image->path, '-1600w', 'webp'),
     ];
 
     $storage = Storage::disk('public');

@@ -115,7 +115,7 @@ test('the review step summarises the listing before anything is stored', functio
         ->set('form.email', 'nuwan@example.lk')
         ->call('next')
         ->assertSet('step', 5)
-        ->assertSee($this->make->name, false)
+        ->assertSee($this->make->name)
         ->assertSee('LKR 6,450,000', false)
         ->assertSee('One owner, full service history.', false)
         ->assertSee('62,000 km', false)

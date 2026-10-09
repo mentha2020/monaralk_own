@@ -122,9 +122,13 @@ class VehicleImageService
             ob_start();
             imagejpeg($canvas, null, 82);
             $storage->put($variantPath, ob_get_clean());
-            imagedestroy($canvas);
+
+            $webpPath = $this->variantPath($image->path, $suffix, 'webp');
 
             $updated[$suffix === '-800w' ? 'path_800w' : 'path_1600w'] = $variantPath;
+            $updated[$suffix === '-800w' ? 'path_800w_webp' : 'path_1600w_webp'] = $this->generateWebp($canvas, $webpPath) ? $webpPath : null;
+
+            imagedestroy($canvas);
         }
 
         $ogPath = $this->variantPath($image->path, '-og');
@@ -141,7 +145,14 @@ class VehicleImageService
     public function purge(VehicleImage $image): void
     {
         DB::transaction(function () use ($image) {
-            $this->deleteFiles($image->getOriginal('path'), $image->getOriginal('path_800w'), $image->getOriginal('path_1600w'), $image->getOriginal('path_og'));
+            $this->deleteFiles(
+                $image->getOriginal('path'),
+                $image->getOriginal('path_800w'),
+                $image->getOriginal('path_1600w'),
+                $image->getOriginal('path_og'),
+                $image->getOriginal('path_800w_webp'),
+                $image->getOriginal('path_1600w_webp'),
+            );
         });
     }
 
@@ -168,12 +179,31 @@ class VehicleImageService
             ->update(['is_cover' => false]);
     }
 
-    public function variantPath(string $path, string $suffix): string
+    public function variantPath(string $path, string $suffix, string $extension = 'jpg'): string
     {
         $directory = str_replace('\\', '/', dirname($path));
         $basename = pathinfo($path, PATHINFO_FILENAME);
 
-        return ($directory === '.' ? '' : $directory.'/').$basename.$suffix.'.jpg';
+        return ($directory === '.' ? '' : $directory.'/').$basename.$suffix.'.'.$extension;
+    }
+
+    private function generateWebp($canvas, string $webpPath): bool
+    {
+        if (! function_exists('imagewebp')) {
+            return false;
+        }
+
+        ob_start();
+        imagewebp($canvas, null, 80);
+        $binary = ob_get_clean();
+
+        if ($binary === '') {
+            return false;
+        }
+
+        Storage::disk(self::DISK)->put($webpPath, $binary);
+
+        return true;
     }
 
     private function generateOgImage($gd, int $width, int $height, string $ogPath): bool

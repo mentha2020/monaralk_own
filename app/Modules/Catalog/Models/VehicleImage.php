@@ -11,7 +11,7 @@ class VehicleImage extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vehicle_id', 'path', 'path_800w', 'path_1600w', 'path_og', 'alt', 'is_cover', 'sort_order',
+        'vehicle_id', 'path', 'path_800w', 'path_1600w', 'path_og', 'path_800w_webp', 'path_1600w_webp', 'alt', 'is_cover', 'sort_order',
     ];
 
     protected $casts = [

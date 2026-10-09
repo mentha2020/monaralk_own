@@ -69,7 +69,12 @@
                                     <div class="flex flex-col items-start gap-2">
                                         <span class="block h-24 w-full overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
                                             @if ($vehicle->coverImage)
-                                                <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($vehicle->coverImage->path_800w ?: $vehicle->coverImage->path) }}" alt="{{ $vehicle->listingTitle() }}" class="h-24 w-full object-cover" loading="lazy">
+                                                <picture>
+                                                    @if ($vehicle->coverImage->path_800w_webp)
+                                                        <source type="image/webp" srcset="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($vehicle->coverImage->path_800w_webp) }}">
+                                                    @endif
+                                                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($vehicle->coverImage->path_800w ?: $vehicle->coverImage->path) }}" alt="{{ $vehicle->listingTitle() }}" class="h-24 w-full object-cover" loading="lazy">
+                                                </picture>
                                             @endif
                                         </span>
                                         <a href="{{ route('vehicles.show', $vehicle) }}" class="text-sm font-bold text-slate-900 transition hover:text-brand-700 dark:text-white dark:hover:text-brand-400">

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Catalog\Observers;
 
+use App\Jobs\GenerateVehicleImageVariants;
 use App\Modules\Catalog\Models\VehicleImage;
 use App\Modules\Catalog\Services\VehicleImageService;
 
@@ -11,7 +12,7 @@ class VehicleImageObserver
 
     public function created(VehicleImage $image): void
     {
-        $this->images->generateVariants($image);
+        GenerateVehicleImageVariants::dispatch($image);
         $this->images->enforceSingleCover($image);
     }
 
@@ -22,9 +23,10 @@ class VehicleImageObserver
                 $image->getOriginal('path'),
                 $image->getOriginal('path_800w'),
                 $image->getOriginal('path_1600w'),
+                $image->getOriginal('path_og'),
             );
 
-            $this->images->generateVariants($image);
+            GenerateVehicleImageVariants::dispatch($image);
         }
 
         if ($image->wasChanged('is_cover')) {

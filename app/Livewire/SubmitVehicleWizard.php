@@ -8,9 +8,11 @@ use App\Modules\Catalog\Models\FuelType;
 use App\Modules\Catalog\Models\Make;
 use App\Modules\Catalog\Models\Transmission;
 use App\Modules\Catalog\Models\VehicleModel;
+use App\Modules\Catalog\Support\CatalogCache;
 use App\Modules\Shared\Rules\ContactNumber;
 use App\Modules\Submissions\Enums\SubmissionStatus;
 use App\Modules\Submissions\Models\VehicleSubmission;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -20,6 +22,10 @@ class SubmitVehicleWizard extends Component
     use WithFileUploads;
 
     public const MAX_PHOTOS = 10;
+
+    public const RATE_LIMIT = 5;
+
+    public const RATE_WINDOW = 600;
 
     private const DATA_KEYS = [
         'make_id',
@@ -65,6 +71,8 @@ class SubmitVehicleWizard extends Component
     /** @var array<int, mixed> */
     public array $photos = [];
 
+    public string $website = '';
+
     public ?int $submissionId = null;
 
     public ?string $reference = null;
@@ -103,11 +111,40 @@ class SubmitVehicleWizard extends Component
         $this->photos = array_values($this->photos);
     }
 
+    public function photoPreviewUrl(mixed $photo): ?string
+    {
+        if (! is_object($photo) || ! method_exists($photo, 'temporaryUrl')) {
+            return null;
+        }
+
+        if (method_exists($photo, 'isPreviewable') && ! $photo->isPreviewable()) {
+            return null;
+        }
+
+        return $photo->temporaryUrl();
+    }
+
     public function submit(): void
     {
         if ($this->submissionId !== null) {
             return;
         }
+
+        if (filled($this->website)) {
+            $this->fakeSuccess();
+
+            return;
+        }
+
+        $rateKey = 'vehicle-submissions:'.request()->ip();
+
+        if (RateLimiter::tooManyAttempts($rateKey, self::RATE_LIMIT)) {
+            $this->addError('form', __('Too many submissions. Please try again in a few minutes.'));
+
+            return;
+        }
+
+        RateLimiter::hit($rateKey, self::RATE_WINDOW);
 
         $this->validate($this->rules());
 
@@ -132,6 +169,14 @@ class SubmitVehicleWizard extends Component
 
         $this->submissionId = $submission->getKey();
         $this->reference = $submission->reference();
+        $this->photos = [];
+        $this->step = 6;
+    }
+
+    private function fakeSuccess(): void
+    {
+        $this->submissionId = 0;
+        $this->reference = 'SUB-'.Str::upper(Str::random(8));
         $this->photos = [];
         $this->step = 6;
     }
@@ -191,16 +236,20 @@ class SubmitVehicleWizard extends Component
                 4 => __('Contact'),
                 5 => __('Review'),
             ],
-            'makes' => Make::query()->where('is_active', true)->orderBy('name')->get(),
-            'models' => VehicleModel::query()
-                ->when($this->form['make_id'], fn ($query) => $query->where('make_id', $this->form['make_id']))
-                ->where('is_active', true)
-                ->orderBy('name')
-                ->get(),
-            'bodyTypes' => BodyType::query()->where('is_active', true)->orderBy('name')->get(),
-            'fuelTypes' => FuelType::query()->where('is_active', true)->orderBy('name')->get(),
-            'transmissions' => Transmission::query()->where('is_active', true)->orderBy('name')->get(),
-            'colors' => Color::query()->where('is_active', true)->orderBy('name')->get(),
+            'makes' => CatalogCache::rememberForever('options.makes', [], fn () => Make::query()->where('is_active', true)->orderBy('name')->get()),
+            'models' => CatalogCache::rememberForever(
+                'options.models',
+                ['make_id' => $this->form['make_id']],
+                fn () => VehicleModel::query()
+                    ->when($this->form['make_id'], fn ($query) => $query->where('make_id', $this->form['make_id']))
+                    ->where('is_active', true)
+                    ->orderBy('name')
+                    ->get()
+            ),
+            'bodyTypes' => CatalogCache::rememberForever('options.body_types', [], fn () => BodyType::query()->where('is_active', true)->orderBy('name')->get()),
+            'fuelTypes' => CatalogCache::rememberForever('options.fuel_types', [], fn () => FuelType::query()->where('is_active', true)->orderBy('name')->get()),
+            'transmissions' => CatalogCache::rememberForever('options.transmissions', [], fn () => Transmission::query()->where('is_active', true)->orderBy('name')->get()),
+            'colors' => CatalogCache::rememberForever('options.colors', [], fn () => Color::query()->where('is_active', true)->orderBy('name')->get()),
             'summary' => $this->summary(),
         ]);
     }
@@ -228,16 +277,16 @@ class SubmitVehicleWizard extends Component
         ];
 
         $values = [
-            'make' => Make::query()->find($this->form['make_id'])?->name,
-            'model' => VehicleModel::query()->find($this->form['model_id'])?->name,
+            'make' => $this->optionName(Make::class, $this->form['make_id']),
+            'model' => $this->optionName(VehicleModel::class, $this->form['model_id']),
             'year' => $this->form['year'],
             'condition' => Str::headline((string) $this->form['condition']),
             'mileage_km' => filled($this->form['mileage_km']) ? number_format((int) $this->form['mileage_km']).' km' : null,
             'price' => filled($this->form['price']) ? 'LKR '.number_format((float) $this->form['price']) : null,
-            'transmission' => Transmission::query()->find($this->form['transmission_id'])?->name,
-            'fuel_type' => FuelType::query()->find($this->form['fuel_type_id'])?->name,
-            'body_type' => BodyType::query()->find($this->form['body_type_id'])?->name,
-            'color' => Color::query()->find($this->form['exterior_color_id'])?->name,
+            'transmission' => $this->optionName(Transmission::class, $this->form['transmission_id']),
+            'fuel_type' => $this->optionName(FuelType::class, $this->form['fuel_type_id']),
+            'body_type' => $this->optionName(BodyType::class, $this->form['body_type_id']),
+            'color' => $this->optionName(Color::class, $this->form['exterior_color_id']),
             'trim' => $this->form['trim'],
             'registration_number' => $this->form['registration_number'],
             'owners_count' => $this->form['owners_count'],
@@ -255,5 +304,14 @@ class SubmitVehicleWizard extends Component
         }
 
         return $rows;
+    }
+
+    private function optionName(string $model, mixed $id): ?string
+    {
+        if (! filled($id)) {
+            return null;
+        }
+
+        return $model::query()->whereKey($id)->value('name');
     }
 }

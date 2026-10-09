@@ -14,13 +14,18 @@
     <a href="{{ route('vehicles.show', $vehicle) }}" class="block focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-600" aria-label="{{ $title }}">
         <div class="relative aspect-[4/3] overflow-hidden bg-slate-100 dark:bg-slate-800">
             @if ($image)
-                <img
-                    src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image) }}"
-                    alt="{{ $cover?->alt ?: $title }}"
-                    loading="lazy"
-                    decoding="async"
-                    class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                >
+                <picture>
+                    @if ($cover->path_800w_webp)
+                        <source type="image/webp" srcset="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($cover->path_800w_webp) }}">
+                    @endif
+                    <img
+                        src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image) }}"
+                        alt="{{ $cover?->alt ?: $title }}"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    >
+                </picture>
             @else
                 <div class="flex h-full w-full items-center justify-center text-slate-400 dark:text-slate-500">
                     <svg class="h-16 w-16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

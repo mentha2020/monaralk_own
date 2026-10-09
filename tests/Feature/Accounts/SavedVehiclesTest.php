@@ -5,8 +5,10 @@ use App\Models\User;
 use App\Modules\Accounts\Enums\SavedType;
 use App\Modules\Accounts\Models\SavedVehicle;
 use App\Modules\Accounts\Services\SavedVehicles;
+use App\Modules\Catalog\Models\Make;
 use App\Modules\Catalog\Models\Vehicle;
 use App\Modules\Catalog\Models\VehicleImage;
+use App\Modules\Catalog\Models\VehicleModel;
 use Livewire\Livewire;
 
 test('guests get the browser backed save buttons instead of a server component', function () {
@@ -97,17 +99,37 @@ test('saved vehicles never leak between accounts', function () {
     $this->actingAs($owner)
         ->get(route('saved.favourites'))
         ->assertOk()
-        ->assertSee($mine->listingTitle(), false)
-        ->assertDontSee($theirs->listingTitle(), false);
+        ->assertSee($mine->listingTitle())
+        ->assertDontSee($theirs->listingTitle());
 
     $this->actingAs($other)
         ->get(route('saved.favourites'))
         ->assertOk()
-        ->assertDontSee($mine->listingTitle(), false);
+        ->assertDontSee($mine->listingTitle());
 
     Livewire::actingAs($other)
         ->test(SaveVehicle::class, ['vehicleId' => $mine->getKey()])
         ->assertSet('favourite', false);
+});
+
+test('a saved listing whose title needs escaping is still matched on the page', function () {
+    $user = User::factory()->create();
+    $make = Make::factory()->create(['name' => "O'Reilly & Sons"]);
+    $model = VehicleModel::factory()->create(['make_id' => $make->getKey(), 'name' => 'Axia G']);
+
+    $vehicle = Vehicle::factory()->create([
+        'make_id' => $make->getKey(),
+        'model_id' => $model->getKey(),
+        'trim' => 'GX',
+    ]);
+
+    SavedVehicle::factory()->create(['user_id' => $user->getKey(), 'vehicle_id' => $vehicle->getKey()]);
+
+    $this->actingAs($user)
+        ->get(route('saved.favourites'))
+        ->assertOk()
+        ->assertSee($vehicle->listingTitle())
+        ->assertDontSee("O'Reilly & Sons Axia G GX", false);
 });
 
 test('the favourites and compare pages send guests to the login screen', function () {
@@ -131,9 +153,9 @@ test('the compare page lists the chosen cars side by side and stops at the cap',
     $response
         ->assertOk()
         ->assertSee(__('Compare cars'), false)
-        ->assertSee($vehicles[0]->listingTitle(), false)
+        ->assertSee($vehicles[0]->listingTitle())
         ->assertSee('/storage/'.$cover->path_800w, false)
-        ->assertDontSee($vehicles[4]->listingTitle(), false);
+        ->assertDontSee($vehicles[4]->listingTitle());
 
     expect(SavedVehicle::query()->where('user_id', $user->getKey())->where('type', SavedType::Compare)->count())
         ->toBe(SavedVehicles::COMPARE_CAP);

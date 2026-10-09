@@ -120,14 +120,19 @@
                 <div x-data="gallery({{ $imageUrls->count() }}, {{ $imageUrls->toJson() }})" class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 dark:border-slate-800 dark:bg-slate-900">
                     <div class="relative aspect-[4/3]">
                         @forelse ($gallery as $index => $image)
-                            <img
-                                x-show="active === {{ $index }}"
-                                x-transition.opacity.duration.200ms
-                                :src="images[{{ $index }}]"
-                                alt="{{ $imageAlts[$index] }}"
-                                class="absolute inset-0 h-full w-full object-cover"
-                                @if ($index !== 0) loading="lazy" @endif
-                            >
+                            <picture>
+                                @if ($image->path_1600w_webp)
+                                    <source type="image/webp" srcset="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_1600w_webp) }}">
+                                @endif
+                                <img
+                                    x-show="active === {{ $index }}"
+                                    x-transition.opacity.duration.200ms
+                                    src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_1600w ?: $image->path) }}"
+                                    alt="{{ $imageAlts[$index] }}"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                                    @if ($index !== 0) loading="lazy" @endif
+                                >
+                            </picture>
                         @empty
                             <div class="flex h-full w-full items-center justify-center text-slate-400">
                                 <svg class="h-20 w-20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -163,7 +168,12 @@
                                     :class="active === {{ $index }} ? 'border-brand-600 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'"
                                     aria-label="{{ __('Photo') }} {{ $index + 1 }}"
                                 >
-                                    <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_800w ?: $image->path) }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                                    <picture>
+                                        @if ($image->path_800w_webp)
+                                            <source type="image/webp" srcset="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_800w_webp) }}">
+                                        @endif
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($image->path_800w ?: $image->path) }}" alt="" class="h-full w-full object-cover" loading="lazy">
+                                    </picture>
                                 </button>
                             @endforeach
                         </div>

@@ -14,6 +14,7 @@ use App\Modules\Catalog\Models\Transmission;
 use App\Modules\Catalog\Models\Vehicle;
 use App\Modules\Catalog\Models\VehicleImage;
 use App\Modules\Catalog\Models\VehicleModel;
+use App\Modules\Catalog\Observers\CatalogCacheObserver;
 use App\Modules\Catalog\Observers\VehicleImageObserver;
 use App\Modules\Catalog\Policies\VehiclePolicy;
 use App\Modules\Catalog\Policies\VehicleTaxonomyPolicy;
@@ -73,5 +74,19 @@ class ModulesServiceProvider extends ServiceProvider
     private function registerObservers(): void
     {
         VehicleImage::observe(VehicleImageObserver::class);
+
+        foreach ([
+            Vehicle::class,
+            VehicleImage::class,
+            Make::class,
+            VehicleModel::class,
+            BodyType::class,
+            FuelType::class,
+            Transmission::class,
+            Color::class,
+            Feature::class,
+        ] as $catalogModel) {
+            $catalogModel::observe(CatalogCacheObserver::class);
+        }
     }
 }

@@ -10,6 +10,7 @@ use App\Modules\Catalog\Models\Make;
 use App\Modules\Catalog\Models\Transmission;
 use App\Modules\Catalog\Models\Vehicle;
 use App\Modules\Catalog\Models\VehicleModel;
+use App\Modules\Catalog\Support\CatalogCache;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -123,12 +124,12 @@ class VehicleSearch extends Component
     {
         return view('livewire.vehicle-search', [
             'vehicles' => $this->vehicles(),
-            'makes' => Make::query()->where('is_active', true)->orderBy('name')->get(),
+            'makes' => CatalogCache::rememberForever('options.makes', [], fn (): Collection => Make::query()->where('is_active', true)->orderBy('name')->get()),
             'models' => $this->modelOptions(),
-            'bodyTypes' => BodyType::query()->where('is_active', true)->orderBy('name')->get(),
-            'fuelTypes' => FuelType::query()->where('is_active', true)->orderBy('name')->get(),
-            'transmissions' => Transmission::query()->where('is_active', true)->orderBy('name')->get(),
-            'colors' => Color::query()->where('is_active', true)->orderBy('name')->get(),
+            'bodyTypes' => CatalogCache::rememberForever('options.body_types', [], fn (): Collection => BodyType::query()->where('is_active', true)->orderBy('name')->get()),
+            'fuelTypes' => CatalogCache::rememberForever('options.fuel_types', [], fn (): Collection => FuelType::query()->where('is_active', true)->orderBy('name')->get()),
+            'transmissions' => CatalogCache::rememberForever('options.transmissions', [], fn (): Collection => Transmission::query()->where('is_active', true)->orderBy('name')->get()),
+            'colors' => CatalogCache::rememberForever('options.colors', [], fn (): Collection => Color::query()->where('is_active', true)->orderBy('name')->get()),
             'conditions' => VehicleCondition::options(),
             'locations' => $this->locationOptions(),
             'yearBounds' => $this->yearBounds(),
@@ -139,10 +140,18 @@ class VehicleSearch extends Component
 
     public function vehicles(): LengthAwarePaginator
     {
-        return Vehicle::query()
-            ->filter($this->filters())
-            ->paginate(self::PER_PAGE)
-            ->withQueryString();
+        $filters = $this->filters();
+        $page = max(1, (int) $this->getPage());
+
+        $result = CatalogCache::remember(
+            'search',
+            array_merge($filters, ['page' => $page]),
+            fn (): LengthAwarePaginator => Vehicle::query()
+                ->filter($filters)
+                ->paginate(self::PER_PAGE, ['*'], 'page', $page)
+        );
+
+        return $result->withQueryString();
     }
 
     public function filters(): array
@@ -236,36 +245,42 @@ class VehicleSearch extends Component
 
     private function modelOptions(): Collection
     {
-        $query = VehicleModel::query()->where('is_active', true);
+        return CatalogCache::rememberForever('options.models', ['make_id' => $this->make_id], function (): Collection {
+            $query = VehicleModel::query()->where('is_active', true);
 
-        if (filled($this->make_id)) {
-            $query->where('make_id', (int) $this->make_id);
-        }
+            if (filled($this->make_id)) {
+                $query->where('make_id', (int) $this->make_id);
+            }
 
-        return $query->orderBy('name')->get();
+            return $query->orderBy('name')->get();
+        });
     }
 
     private function locationOptions(): SupportCollection
     {
-        return Vehicle::query()
-            ->publiclyVisible()
-            ->whereNotNull('location')
-            ->where('location', '!=', '')
-            ->distinct()
-            ->orderBy('location')
-            ->pluck('location');
+        return CatalogCache::rememberForever('options.locations', [], function (): SupportCollection {
+            return Vehicle::query()
+                ->publiclyVisible()
+                ->whereNotNull('location')
+                ->where('location', '!=', '')
+                ->distinct()
+                ->orderBy('location')
+                ->pluck('location');
+        });
     }
 
     private function yearBounds(): array
     {
-        $bounds = Vehicle::query()
-            ->publiclyVisible()
-            ->selectRaw('MIN(year) as min_year, MAX(year) as max_year')
-            ->first();
+        return CatalogCache::rememberForever('options.year_bounds', [], function (): array {
+            $bounds = Vehicle::query()
+                ->publiclyVisible()
+                ->selectRaw('MIN(year) as min_year, MAX(year) as max_year')
+                ->first();
 
-        return [
-            'min' => (int) ($bounds->min_year ?? 1990),
-            'max' => (int) ($bounds->max_year ?? now()->year),
-        ];
+            return [
+                'min' => (int) ($bounds->min_year ?? 1990),
+                'max' => (int) ($bounds->max_year ?? now()->year),
+            ];
+        });
     }
 }
